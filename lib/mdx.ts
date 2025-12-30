@@ -1,8 +1,4 @@
-import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
-
-const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 export interface BlogPost {
   slug: string;
@@ -14,41 +10,61 @@ export interface BlogPost {
   content?: string;
 }
 
-export async function getBlogPosts(language: "en" | "es" = "en"): Promise<BlogPost[]> {
-  if (!fs.existsSync(BLOG_DIR)) {
+interface BlogPostManifest {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  thumbnail?: string;
+  language: "en" | "es";
+}
+
+interface BlogManifest {
+  posts: BlogPostManifest[];
+}
+
+async function getManifest(baseUrl: string = ""): Promise<BlogManifest | null> {
+  try {
+    // Construct absolute URL for Edge Runtime
+    const manifestUrl = baseUrl
+      ? `${baseUrl}/blog-data/manifest.json`
+      : "/blog-data/manifest.json";
+    
+    const response = await fetch(manifestUrl, {
+      cache: "force-cache", // Cache the manifest
+    });
+
+    if (!response.ok) {
+      console.error("Failed to fetch blog manifest:", response.statusText);
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching blog manifest:", error);
+    return null;
+  }
+}
+
+export async function getBlogPosts(language: "en" | "es" = "en", baseUrl: string = ""): Promise<BlogPost[]> {
+  const manifest = await getManifest(baseUrl);
+  
+  if (!manifest) {
     return [];
   }
 
-  const files = fs.readdirSync(BLOG_DIR).filter((file) => {
-    if (language === "en") {
-      // For English, only include files that don't have .es. in the name
-      return file.endsWith(".mdx") && !file.includes(".es.mdx");
-    } else {
-      // For Spanish, only include files that have .es.mdx
-      return file.endsWith(".es.mdx");
-    }
-  });
-
-  const posts: BlogPost[] = files
-    .map((file) => {
-      const filePath = path.join(BLOG_DIR, file);
-      const fileContent = fs.readFileSync(filePath, "utf-8");
-      const { data } = matter(fileContent);
-
-      // Extract base slug (remove .es.mdx or .mdx)
-      const slug = language === "es" 
-        ? file.replace(".es.mdx", "")
-        : file.replace(".mdx", "");
-
-      return {
-        slug,
-        title: data.title || "Untitled",
-        description: data.description || "",
-        date: data.date || new Date().toISOString(),
-        author: data.author || "Unknown",
-        thumbnail: data.thumbnail || undefined,
-      };
-    })
+  // Filter posts by language
+  const posts = manifest.posts
+    .filter((post) => post.language === language)
+    .map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      author: post.author,
+      thumbnail: post.thumbnail,
+    }))
     .sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -56,41 +72,45 @@ export async function getBlogPosts(language: "en" | "es" = "en"): Promise<BlogPo
   return posts;
 }
 
-export async function getBlogPost(slug: string, language: "en" | "es" = "en"): Promise<BlogPost | null> {
-  const fileName = language === "es" ? `${slug}.es.mdx` : `${slug}.mdx`;
-  const filePath = path.join(BLOG_DIR, fileName);
+export async function getBlogPost(slug: string, language: "en" | "es" = "en", baseUrl: string = ""): Promise<BlogPost | null> {
+  try {
+    // Construct absolute URL for Edge Runtime
+    const postUrl = baseUrl
+      ? `${baseUrl}/blog-data/${slug}-${language}.json`
+      : `/blog-data/${slug}-${language}.json`;
+    
+    let response = await fetch(postUrl, {
+      cache: "force-cache",
+    });
 
-  if (!fs.existsSync(filePath)) {
     // Fallback to English if Spanish version doesn't exist
-    if (language === "es") {
-      const englishPath = path.join(BLOG_DIR, `${slug}.mdx`);
-      if (fs.existsSync(englishPath)) {
-        const fileContent = fs.readFileSync(englishPath, "utf-8");
-        const { data, content } = matter(fileContent);
-        return {
-          slug,
-          title: data.title || "Untitled",
-          description: data.description || "",
-          date: data.date || new Date().toISOString(),
-          author: data.author || "Unknown",
-          thumbnail: data.thumbnail || undefined,
-          content,
-        };
-      }
+    if (!response.ok && language === "es") {
+      const englishUrl = baseUrl
+        ? `${baseUrl}/blog-data/${slug}-en.json`
+        : `/blog-data/${slug}-en.json`;
+      response = await fetch(englishUrl, {
+        cache: "force-cache",
+      });
     }
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const { content: fileContent } = await response.json();
+    const { data, content } = matter(fileContent);
+
+    return {
+      slug,
+      title: data.title || "Untitled",
+      description: data.description || "",
+      date: data.date || new Date().toISOString(),
+      author: data.author || "Unknown",
+      thumbnail: data.thumbnail || undefined,
+      content,
+    };
+  } catch (error) {
+    console.error("Error fetching blog post:", error);
     return null;
   }
-
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-  const { data, content } = matter(fileContent);
-
-  return {
-    slug,
-    title: data.title || "Untitled",
-    description: data.description || "",
-    date: data.date || new Date().toISOString(),
-    author: data.author || "Unknown",
-    thumbnail: data.thumbnail || undefined,
-    content,
-  };
 }

@@ -9,9 +9,11 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const { searchParams } = new URL(request.url);
+    const url = new URL(request.url);
+    const { searchParams } = url;
     const language = (searchParams.get("language") || "en") as "en" | "es";
-    const post = await getBlogPost(slug, language);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    const post = await getBlogPost(slug, language, baseUrl);
     
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });

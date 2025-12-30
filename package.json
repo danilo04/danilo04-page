@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:blog && next build",
     "start": "next start",
     "lint": "eslint",
-    "pages:build": "npx @cloudflare/next-on-pages",
+    "generate:blog": "tsx scripts/generate-blog-manifest.ts",
+    "pages:build": "npm run generate:blog && npx @cloudflare/next-on-pages",
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
     "preview": "wrangler pages dev .vercel/output/static"
   },
@@ -20,7 +21,7 @@
     "framer-motion": "^12.23.24",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.554.0",
-    "next": "16.0.3",
+    "next": "^16.1.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "tailwind-merge": "^3.4.0"
@@ -35,6 +36,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
     "tailwindcss": "^4",
+    "tsx": "^4.7.0",
     "typescript": "^5"
   }
 }

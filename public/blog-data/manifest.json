@@ -1,0 +1,52 @@
+{
+  "posts": [
+    {
+      "slug": "nextjs-typescript-guide",
+      "title": "Empezando con Next.js y TypeScript",
+      "description": "Una guía completa para configurar un proyecto Next.js moderno con TypeScript para desarrollo con seguridad de tipos.",
+      "date": "2024-11-19",
+      "author": "Danilo",
+      "language": "es"
+    },
+    {
+      "slug": "nextjs-typescript-guide",
+      "title": "Getting Started with Next.js and TypeScript",
+      "description": "A comprehensive guide to setting up a modern Next.js project with TypeScript for type-safe development.",
+      "date": "2024-11-19",
+      "author": "Danilo",
+      "language": "en"
+    },
+    {
+      "slug": "tailwind-css-guide",
+      "title": "Dominando Tailwind CSS",
+      "description": "Aprende cómo aprovechar las utilidades de Tailwind CSS para construir interfaces de usuario hermosas y responsivas de manera eficiente.",
+      "date": "2024-11-18",
+      "author": "Danilo",
+      "language": "es"
+    },
+    {
+      "slug": "tailwind-css-guide",
+      "title": "Mastering Tailwind CSS",
+      "description": "Learn how to leverage Tailwind CSS utilities to build beautiful, responsive user interfaces efficiently.",
+      "date": "2024-11-18",
+      "author": "Danilo",
+      "language": "en"
+    },
+    {
+      "slug": "framer-motion-guide",
+      "title": "Construyendo Animaciones Suaves con Framer Motion",
+      "description": "Descubre cómo crear animaciones hermosas y de alto rendimiento usando Framer Motion en aplicaciones React.",
+      "date": "2024-11-17",
+      "author": "Danilo",
+      "language": "es"
+    },
+    {
+      "slug": "framer-motion-guide",
+      "title": "Building Smooth Animations with Framer Motion",
+      "description": "Discover how to create beautiful, performant animations using Framer Motion in React applications.",
+      "date": "2024-11-17",
+      "author": "Danilo",
+      "language": "en"
+    }
+  ]
+}
