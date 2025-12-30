@@ -152,6 +152,30 @@ npm install -g vercel
 vercel
 ```
 
+### Deploy to Cloudflare Pages
+
+1. **Install dependencies**:
+   ```bash
+   npm install --save-dev @cloudflare/next-on-pages wrangler
+   ```
+
+2. **Deploy via Cloudflare Dashboard** (Recommended):
+   - Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
+   - Navigate to **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**
+   - Connect your repository
+   - **Build settings**:
+     - Build command: `npm run pages:build`
+     - Build output directory: `.vercel/output/static`
+     - Node.js version: `18` or `20`
+
+3. **Deploy via CLI**:
+   ```bash
+   npm run pages:build
+   npx wrangler pages deploy .vercel/output/static --project-name=danilo04-portafolio
+   ```
+
+   For more details, see [.cloudflare/README.md](.cloudflare/README.md)
+
 ## 🔧 Development Scripts
 
 ```bash
