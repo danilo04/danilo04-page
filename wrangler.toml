@@ -1,4 +1,5 @@
-name = "danilo04-portafolio"
+# wrangler.toml
+name = 'danilo04-page'
 compatibility_date = "2024-01-01"
 
 [build]
