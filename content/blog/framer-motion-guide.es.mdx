@@ -1,0 +1,66 @@
+---
+title: "Construyendo Animaciones Suaves con Framer Motion"
+description: "Descubre cómo crear animaciones hermosas y de alto rendimiento usando Framer Motion en aplicaciones React."
+date: "2024-11-17"
+author: "Danilo"
+---
+
+# Construyendo Animaciones Suaves con Framer Motion
+
+Framer Motion es una biblioteca de movimiento lista para producción para React. Facilita la construcción de animaciones hermosas con una API simple y declarativa.
+
+## ¿Por qué Framer Motion?
+
+- **API Simple** - Sintaxis intuitiva para animaciones complejas
+- **Rendimiento** - Animaciones aceleradas por GPU
+- **Características Poderosas** - Gestos, arrastre y animaciones de diseño
+- **Excelente Documentación** - Documentación y ejemplos excelentes
+
+## Animación Básica
+
+```jsx
+import { motion } from "framer-motion";
+
+export function AnimatedBox() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      ¡Hola, Framer Motion!
+    </motion.div>
+  );
+}
+```
+
+## Patrones de Animación Comunes
+
+### Desvanecer
+```jsx
+<motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+/>
+```
+
+### Deslizar
+```jsx
+<motion.div
+  initial={{ x: -100 }}
+  animate={{ x: 0 }}
+/>
+```
+
+### Escalar
+```jsx
+<motion.div
+  initial={{ scale: 0 }}
+  animate={{ scale: 1 }}
+/>
+```
+
+## Conclusión
+
+Framer Motion facilita agregar animaciones deliciosas a tus aplicaciones React. ¡Comienza a experimentar y da vida a tus interfaces!
+
