@@ -97,8 +97,21 @@ export async function getBlogPost(slug: string, language: "en" | "es" = "en", ba
       return null;
     }
 
-    const { content: fileContent } = await response.json();
-    const { data, content } = matter(fileContent);
+    const jsonData = await response.json();
+    const { content: fileContent, html } = jsonData;
+    
+    // Use HTML if available, otherwise parse markdown
+    let content: string;
+    if (html) {
+      content = html;
+    } else {
+      // Fallback: parse markdown from fileContent
+      const { data, content: markdownContent } = matter(fileContent);
+      content = markdownContent;
+    }
+    
+    // Parse frontmatter for metadata
+    const { data } = matter(fileContent);
 
     return {
       slug,
