@@ -9,3 +9,6 @@ cwd = "."
 [build.upload]
 format = "service-worker"
 
+[assets]
+directory = "./public"
+
