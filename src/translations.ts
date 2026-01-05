@@ -62,6 +62,27 @@ export const translations = {
         p3: "As a creative problem-solver and collaborative team player, I thrive in taking ownership of complex projects, driving innovation through secure and performant solutions. I'm passionate about building systems that prioritize user privacy and security while maintaining exceptional performance and scalability.",
         p4: "Passionate about problem solving, having tackled complex issues across the full stack: backend, integration, frontend, and mobile.",
       },
+      section: {
+        heading: "Engineering & Research Excellence",
+        summary: "With over 9 years of experience, I specialize in creating secure, native Android applications. My work bridges the gap between academic research in security and practical, high-performance engineering.",
+        features: [
+          {
+            id: "native",
+            title: "Native Android Expert",
+            description: "9+ years crafting high-performance apps with Kotlin and Java. Deep expertise in the Android SDK, custom views, and performance tuning.",
+          },
+          {
+            id: "security",
+            title: "Privacy & Security",
+            description: "Building robust sync engines for offline-first architecture and implementing advanced end-to-end encryption protocols.",
+          },
+          {
+            id: "research",
+            title: "Doctoral Research",
+            description: "PhD in Static Analysis. My research focuses on automated detection of vulnerabilities and data leaks in large-scale Android applications.",
+          },
+        ],
+      },
       skills: {
         title: "Skills",
         categories: {
@@ -183,6 +204,42 @@ export const translations = {
       back: "Back to Blog",
       postNotFound: "Post not found",
       postNotFoundDescription: "The blog post you're looking for doesn't exist yet.",
+      section: {
+        heading: "Latest Thoughts",
+        description: "Insights on engineering, security, and the evolving Android ecosystem from a PhD perspective.",
+        viewAllPosts: "View all posts",
+        categories: {
+          security: "Security",
+          engineering: "Engineering",
+          research: "Research",
+        },
+        posts: [
+          {
+            id: "1",
+            category: "security",
+            title: "Implementing End-to-End Encryption in Kotlin",
+            summary: "A practical guide to integrating the Signal Protocol for secure messaging in modern Android applications.",
+            date: "Oct 12, 2023",
+            readTime: "8 min read",
+          },
+          {
+            id: "2",
+            category: "engineering",
+            title: "Optimizing Sync Engines for Low-Connectivity",
+            summary: "Strategies for building robust, offline-first architectures that handle spotty networks gracefully without draining battery.",
+            date: "Sep 28, 2023",
+            readTime: "12 min read",
+          },
+          {
+            id: "3",
+            category: "research",
+            title: "Understanding Android Static Analysis Tools",
+            summary: "How to use custom lint rules and academic static analysis frameworks to catch privacy leaks before they hit production.",
+            date: "Aug 15, 2023",
+            readTime: "15 min read",
+          },
+        ],
+      },
     },
     // Projects Page
     projects: {
@@ -282,6 +339,27 @@ export const translations = {
         p2: "Especializado en construir soluciones móviles centradas en la privacidad, tengo un historial comprobado de implementar motores de sincronización robustos, cifrado avanzado y protocolos de red confiables para aplicaciones escalables y confiables para el usuario. En Automattic, lideré el desarrollo de un motor de sincronización para la aplicación Day One Journal, reduciendo tickets de soporte y aumentando los usuarios activos mensuales en un 142%. Mi experiencia abarca patrones arquitectónicos, propiedad de proyectos de extremo a extremo y mentoría de compañeros.",
         p3: "Como solucionador de problemas creativo y jugador de equipo colaborativo, prospero al tomar posesión de proyectos complejos, impulsando la innovación a través de soluciones seguras y de alto rendimiento. Me apasiona construir sistemas que priorizan la privacidad y seguridad del usuario mientras mantienen un rendimiento y escalabilidad excepcionales.",
         p4: "Apasionado por la resolución de problemas, habiendo abordado problemas complejos en toda la pila: backend, integración, frontend y móvil.",
+      },
+      section: {
+        heading: "Excelencia en Ingeniería e Investigación",
+        summary: "Con más de 9 años de experiencia, me especializo en crear aplicaciones Android nativas seguras. Mi trabajo conecta la investigación académica en seguridad con la ingeniería práctica de alto rendimiento.",
+        features: [
+          {
+            id: "native",
+            title: "Experto en Android Nativo",
+            description: "Más de 9 años creando aplicaciones de alto rendimiento con Kotlin y Java. Experiencia profunda en el Android SDK, vistas personalizadas y optimización de rendimiento.",
+          },
+          {
+            id: "security",
+            title: "Privacidad y Seguridad",
+            description: "Construyendo motores de sincronización robustos para arquitectura offline-first e implementando protocolos avanzados de cifrado de extremo a extremo.",
+          },
+          {
+            id: "research",
+            title: "Investigación Doctoral",
+            description: "Doctorado en Análisis Estático. Mi investigación se enfoca en la detección automatizada de vulnerabilidades y fugas de datos en aplicaciones Android a gran escala.",
+          },
+        ],
       },
       skills: {
         title: "Habilidades",
@@ -404,6 +482,42 @@ export const translations = {
       back: "Volver al Blog",
       postNotFound: "Publicación no encontrada",
       postNotFoundDescription: "La publicación del blog que buscas aún no existe.",
+      section: {
+        heading: "Últimos Pensamientos",
+        description: "Perspectivas sobre ingeniería, seguridad y el ecosistema Android en evolución desde una perspectiva de PhD.",
+        viewAllPosts: "Ver todas las publicaciones",
+        categories: {
+          security: "Seguridad",
+          engineering: "Ingeniería",
+          research: "Investigación",
+        },
+        posts: [
+          {
+            id: "1",
+            category: "security",
+            title: "Implementando Cifrado de Extremo a Extremo en Kotlin",
+            summary: "Una guía práctica para integrar el Protocolo Signal para mensajería segura en aplicaciones Android modernas.",
+            date: "12 Oct, 2023",
+            readTime: "8 min de lectura",
+          },
+          {
+            id: "2",
+            category: "engineering",
+            title: "Optimizando Motores de Sincronización para Baja Conectividad",
+            summary: "Estrategias para construir arquitecturas robustas y offline-first que manejan redes intermitentes con elegancia sin agotar la batería.",
+            date: "28 Sep, 2023",
+            readTime: "12 min de lectura",
+          },
+          {
+            id: "3",
+            category: "research",
+            title: "Entendiendo las Herramientas de Análisis Estático de Android",
+            summary: "Cómo usar reglas de lint personalizadas y frameworks académicos de análisis estático para detectar fugas de privacidad antes de que lleguen a producción.",
+            date: "15 Ago, 2023",
+            readTime: "15 min de lectura",
+          },
+        ],
+      },
     },
     // Projects Page
     projects: {

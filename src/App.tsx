@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
+import About from './components/About'
+import Blog from './components/Blog'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import cloudflareLogo from './assets/Cloudflare_Logo.svg'
@@ -34,8 +36,8 @@ const App: React.FC = () => {
       <Header theme={theme} onToggleTheme={toggleTheme} />
       <main>
         <Hero />
-        {/* <About />
-        <Blog /> */}
+        <About /> 
+        <Blog />
       </main>
       <Footer />
     </div>
