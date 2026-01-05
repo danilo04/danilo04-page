@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslations } from '../hooks/useTranslations';
+import daniloCartoon from '../assets/danilo-cartoon.png';
 
 export const TECH_STACK = ['Kotlin', 'Java', 'Android SDK', 'Encryption', 'Static Analysis'];
 
@@ -46,7 +47,7 @@ const Hero: React.FC = () => {
           <div className="relative aspect-square rounded-3xl overflow-hidden border border-border-dark bg-surface-dark shadow-2xl group">
              <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-purple-500/20 z-10 mix-blend-overlay"></div>
              <img 
-               src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2PwaVAYl2kG2R-mfF_PcvnGqNhw5XRPRNTbeiL8X0GkGt6MuAg8_yW_MaCaOKBzmwwWKFlAWF8yKvoxc79vQtphGPNgL_UtpAqvPIfeCtzO2PEG1rOr11AULXzMc4sAkTjOVsw4JM8ZXGZtIqtOB_xsLEX3K8qV0NVodNt9oGMzyu4Mlxg4_DJtdc_4v34YnLDKF1Qw6mchK_QbLBmKlb3BxZDhan_Ym6S7BiRuzipQ-UjN1zDcIkaZ3cA7MNerWg5MlG-SvKD4XV" 
+               src={daniloCartoon} 
                alt={t.home.hero.imageAlt} 
                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
              />

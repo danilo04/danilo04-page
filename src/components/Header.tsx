@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslations } from '../hooks/useTranslations';
+import { LanguageToggle } from './language-toggle';
+
 
 interface HeaderProps {
     theme: 'light' | 'dark';
@@ -28,6 +30,11 @@ interface HeaderProps {
   
             <div className="h-6 w-px bg-slate-200 dark:bg-border-dark mx-2"></div>
   
+            <div className="flex items-center gap-2">
+            {/* Language Toggle */}
+            <LanguageToggle />
+
+            {/* Theme Toggle */}
             <button 
               onClick={onToggleTheme}
               className="p-2 text-slate-500 dark:text-slate-400 hover:text-primary transition-all hover:scale-110"
@@ -39,6 +46,7 @@ interface HeaderProps {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
               )}
             </button>
+          </div>
   
             <button className="h-10 px-5 bg-primary text-background-dark text-sm font-bold rounded-lg hover:bg-blue-400 transition-colors shadow-sm">
               {t.home.cta.getInTouch}
