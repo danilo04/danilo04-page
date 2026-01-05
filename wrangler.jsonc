@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "danil04-page",
+	"name": "danilo04-page",
 	"main": "worker/index.ts",
 	"compatibility_date": "2026-01-03",
 	"assets": {
