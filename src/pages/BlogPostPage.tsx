@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
 import { useLanguage } from '../components/language-provider';
 import { getPostBySlug, getRelatedPosts } from '../content/blog';
@@ -7,8 +7,13 @@ import { MDXProvider } from '../components/MDXProvider';
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const [searchParams] = useSearchParams();
   const t = useTranslations();
-  const { language } = useLanguage();
+  const { language: contextLanguage } = useLanguage();
+  
+  // Use lang query param if valid, otherwise fall back to context language
+  const langParam = searchParams.get('lang');
+  const language = (langParam === 'en' || langParam === 'es') ? langParam : contextLanguage;
   
   const post = slug ? getPostBySlug(slug, language) : undefined;
   const relatedPosts = slug ? getRelatedPosts(slug, language, 2) : [];
