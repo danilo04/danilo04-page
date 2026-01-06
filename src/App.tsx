@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ResearchPage from './pages/ResearchPage';
 import TalksPage from './pages/TalksPage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -39,6 +41,8 @@ const App: React.FC = () => {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/research" element={<ResearchPage />} />
             <Route path="/talks" element={<TalksPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
           </Routes>
         </main>
         <Footer />

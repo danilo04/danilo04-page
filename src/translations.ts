@@ -414,6 +414,7 @@ export const translations = {
           security: "Security",
           engineering: "Engineering",
           research: "Research",
+          mobile: "Mobile",
         },
         posts: [
           {
@@ -1030,6 +1031,7 @@ export const translations = {
           security: "Seguridad",
           engineering: "Ingeniería",
           research: "Investigación",
+          mobile: "Móvil",
         },
         posts: [
           {

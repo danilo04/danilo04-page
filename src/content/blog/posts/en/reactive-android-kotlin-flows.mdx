@@ -1,0 +1,243 @@
+---
+slug: reactive-android-kotlin-flows
+title: Building Reactive Android Apps with Kotlin Flows
+summary: A deep dive into using Kotlin Flows to build reactive, responsive Android applications. Learn how to handle asynchronous data streams effectively.
+category: mobile
+coverImage: https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=1200&h=630&fit=crop
+author: Danilo Dominguez
+date: 2026-01-06
+readTime: 12 min read
+tags:
+  - Kotlin
+  - Android
+  - Flows
+  - Coroutines
+  - Reactive Programming
+published: true
+---
+
+# Building Reactive Android Apps with Kotlin Flows
+
+In modern Android development, handling asynchronous data streams is crucial for building responsive applications. **Kotlin Flows** provide a powerful, coroutine-based solution for reactive programming that integrates seamlessly with the Android lifecycle.
+
+## What are Kotlin Flows?
+
+Kotlin Flows are a type of **cold asynchronous stream** that sequentially emits values and completes normally or with an exception. Unlike `LiveData`, Flows are built on top of Kotlin Coroutines and offer more flexibility and power for handling complex data transformations.
+
+```kotlin
+// A simple Flow that emits numbers
+val numbersFlow: Flow<Int> = flow {
+    for (i in 1..5) {
+        delay(1000)
+        emit(i)
+    }
+}
+```
+
+## Flow vs StateFlow vs SharedFlow
+
+Understanding the differences between these three types is essential:
+
+### Flow (Cold Stream)
+- Starts emitting only when collected
+- Each collector gets its own independent stream
+- Perfect for one-time operations like API calls
+
+```kotlin
+fun fetchUserData(): Flow<User> = flow {
+    val user = api.getUser()
+    emit(user)
+}
+```
+
+### StateFlow (Hot Stream with State)
+- Always has a current value
+- New collectors immediately receive the current state
+- Ideal for UI state management
+
+```kotlin
+class UserViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(UserUiState())
+    val uiState: StateFlow<UserUiState> = _uiState.asStateFlow()
+    
+    fun updateName(name: String) {
+        _uiState.update { it.copy(name = name) }
+    }
+}
+```
+
+### SharedFlow (Hot Stream without State)
+- No initial value
+- Can replay emissions to new collectors
+- Great for events like navigation or snackbar messages
+
+```kotlin
+class EventViewModel : ViewModel() {
+    private val _events = MutableSharedFlow<UiEvent>()
+    val events: SharedFlow<UiEvent> = _events.asSharedFlow()
+    
+    fun showMessage(message: String) {
+        viewModelScope.launch {
+            _events.emit(UiEvent.ShowSnackbar(message))
+        }
+    }
+}
+```
+
+## Collecting Flows in Android
+
+The key challenge in Android is collecting flows **safely** with respect to the lifecycle. Here are the best practices:
+
+### Using repeatOnLifecycle
+
+```kotlin
+class UserActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    updateUi(state)
+                }
+            }
+        }
+    }
+}
+```
+
+### With Jetpack Compose
+
+Compose makes collecting flows even easier with the `collectAsState` extension:
+
+```kotlin
+@Composable
+fun UserScreen(viewModel: UserViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    Column {
+        Text(text = "Hello, ${uiState.name}")
+        // ... rest of UI
+    }
+}
+```
+
+## Flow Operators for Transformations
+
+Flows come with powerful operators for transforming data:
+
+```kotlin
+repository.getUsersFlow()
+    .map { users -> users.filter { it.isActive } }
+    .distinctUntilChanged()
+    .debounce(300)
+    .catch { e -> emit(emptyList()) }
+    .flowOn(Dispatchers.IO)
+    .collect { activeUsers ->
+        updateUserList(activeUsers)
+    }
+```
+
+### Common Operators
+
+| Operator | Description |
+|----------|-------------|
+| `map` | Transform each emitted value |
+| `filter` | Only emit values matching a predicate |
+| `debounce` | Wait for silence before emitting |
+| `distinctUntilChanged` | Skip consecutive duplicates |
+| `combine` | Combine multiple flows |
+| `flatMapLatest` | Cancel previous when new value arrives |
+
+## Real-World Example: Search with Debounce
+
+Here's a practical example of implementing a search feature with debouncing:
+
+```kotlin
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
+    
+    private val _searchQuery = MutableStateFlow("")
+    
+    val searchResults: StateFlow<SearchUiState> = _searchQuery
+        .debounce(300) // Wait 300ms after typing stops
+        .distinctUntilChanged() // Only search if query changed
+        .flatMapLatest { query ->
+            if (query.isBlank()) {
+                flowOf(SearchUiState.Empty)
+            } else {
+                searchRepository.search(query)
+                    .map { results -> SearchUiState.Success(results) }
+                    .onStart { emit(SearchUiState.Loading) }
+                    .catch { emit(SearchUiState.Error(it.message)) }
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = SearchUiState.Empty
+        )
+    
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
+}
+```
+
+## Error Handling in Flows
+
+Proper error handling is crucial for production apps:
+
+```kotlin
+flow {
+    emit(api.fetchData())
+}
+.retry(3) { cause ->
+    cause is IOException
+}
+.catch { exception ->
+    // Handle or transform the exception
+    emit(fallbackValue)
+}
+.collect { data ->
+    processData(data)
+}
+```
+
+## Testing Flows
+
+Testing flows is straightforward with the `turbine` library:
+
+```kotlin
+@Test
+fun `search emits loading then results`() = runTest {
+    val viewModel = SearchViewModel(fakeRepository)
+    
+    viewModel.searchResults.test {
+        assertEquals(SearchUiState.Empty, awaitItem())
+        
+        viewModel.onSearchQueryChanged("kotlin")
+        
+        assertEquals(SearchUiState.Loading, awaitItem())
+        assertEquals(SearchUiState.Success(expectedResults), awaitItem())
+        
+        cancelAndIgnoreRemainingEvents()
+    }
+}
+```
+
+## Conclusion
+
+Kotlin Flows provide a powerful, flexible way to handle asynchronous data streams in Android. By understanding the differences between Flow, StateFlow, and SharedFlow, and by using the appropriate lifecycle-aware collection methods, you can build robust, reactive applications that handle complex data scenarios with ease.
+
+### Key Takeaways
+
+1. Use **StateFlow** for UI state that needs a current value
+2. Use **SharedFlow** for one-time events
+3. Always collect with **lifecycle awareness**
+4. Leverage **operators** for complex transformations
+5. Use `stateIn` to convert cold flows to hot StateFlows
+
+Happy coding! 🚀
+

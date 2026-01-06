@@ -5,3 +5,75 @@
     @apply min-h-screen transition-colors duration-200;
   }
 }
+
+/* Syntax Highlighting Styles (highlight.js) */
+.hljs {
+  background: transparent !important;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+  color: #c084fc;
+}
+
+.hljs-string,
+.hljs-attr {
+  color: #34d399;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable {
+  color: #f97316;
+}
+
+.hljs-title,
+.hljs-function {
+  color: #60a5fa;
+}
+
+.hljs-class .hljs-title {
+  color: #fbbf24;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #22d3ee;
+}
+
+.hljs-attribute,
+.hljs-tag,
+.hljs-name {
+  color: #f472b6;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #a78bfa;
+}
+
+.hljs-params {
+  color: #e2e8f0;
+}
+
+.hljs-meta {
+  color: #94a3b8;
+}
+
+.hljs-addition {
+  color: #34d399;
+  background-color: rgba(52, 211, 153, 0.1);
+}
+
+.hljs-deletion {
+  color: #f87171;
+  background-color: rgba(248, 113, 113, 0.1);
+}
