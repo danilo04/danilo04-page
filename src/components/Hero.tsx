@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
 import daniloCartoon from '../assets/danilo-cartoon.png';
 
-export const TECH_STACK = ['Kotlin', 'Java', 'Android SDK', 'Encryption', 'Static Analysis'];
+export const TECH_STACK = ['Kotlin', 'Java', 'Android SDK', 'Encryption', 'Spring Boot', 'Static Analysis'];
 
 const Hero: React.FC = () => {
   const t = useTranslations();
@@ -52,10 +52,6 @@ const Hero: React.FC = () => {
                alt={t.home.hero.imageAlt} 
                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
              />
-             <div className="absolute bottom-6 left-6 right-6 p-4 rounded-xl bg-background-dark/80 backdrop-blur-md border border-border-dark z-20 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                <p className="text-xs font-bold text-primary uppercase mb-1">{t.home.hero.architecturePreview}</p>
-                <p className="text-sm text-slate-300">{t.home.hero.architectureDescription}</p>
-             </div>
           </div>
         </div>
       </div>
