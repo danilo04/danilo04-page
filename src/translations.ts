@@ -148,11 +148,11 @@ export const translations = {
         categories: [
           {
             name: "Mobile Development",
-            items: ["Kotlin", "Java", "Android SDK", "Jetpack Compose", "Kotlin Coroutines", "Kotlin Flows", "Room", "Firebase", "Kotlin Multiplatform (KMP)"],
+            items: ["Kotlin", "Java", "Android SDK", "Swift", "iOS", "Jetpack Compose", "Kotlin Coroutines", "Kotlin Flows", "Room", "Firebase", "Kotlin Multiplatform (KMP)"],
           },
           {
             name: "Backend & Architecture",
-            items: ["Ruby on Rails", "Python", "J2EE", "REST APIs", "MVVM", "Clean Architecture", "End-to-End Encryption"],
+            items: ["Ruby on Rails", "Python", "J2EE", "Laravel", "CakePHP", "SpringBoot", "REST APIs", "MVVM", "Clean Architecture", "End-to-End Encryption"],
           },
           {
             name: "Databases",
@@ -776,11 +776,11 @@ export const translations = {
         categories: [
           {
             name: "Desarrollo Móvil",
-            items: ["Kotlin", "Java", "Android SDK", "Jetpack Compose", "Kotlin Coroutines", "Kotlin Flows", "Room", "Firebase", "Kotlin Multiplatform (KMP)"],
+            items: ["Kotlin", "Java", "Android SDK", "Swift", "iOS", "Jetpack Compose", "Kotlin Coroutines", "Kotlin Flows", "Room", "Firebase", "Kotlin Multiplatform (KMP)"],
           },
           {
             name: "Backend y Arquitectura",
-            items: ["Ruby on Rails", "Python", "J2EE", "REST APIs", "MVVM", "Clean Architecture", "Cifrado de Extremo a Extremo"],
+            items: ["Ruby on Rails", "Python", "J2EE", "Laravel", "CakePHP", "SpringBoot", "REST APIs", "MVVM", "Clean Architecture", "Cifrado de Extremo a Extremo"],
           },
           {
             name: "Bases de Datos",

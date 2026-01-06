@@ -41,12 +41,12 @@ interface HeaderProps {
     return (
       <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-border-dark bg-white/80 dark:bg-background-dark/80 backdrop-blur-md transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 md:px-10 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <div className="size-8 text-primary flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </div>
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Danilo Dominguez</h1>
-          </div>
+          </Link>
           
           <nav className="hidden md:flex flex-1 justify-end items-center gap-4">
             <div className="flex items-center gap-5">
