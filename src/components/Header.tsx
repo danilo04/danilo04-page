@@ -79,9 +79,12 @@ interface HeaderProps {
             </button>
           </div>
 
-            <button className="h-10 px-5 bg-primary text-background-dark text-sm font-bold rounded-lg hover:bg-blue-400 transition-colors shadow-sm">
+            <a 
+              href="mailto:danilo.dominguez.0416@gmail.com"
+              className="h-10 px-5 bg-primary text-background-dark text-sm font-bold rounded-lg hover:bg-blue-400 transition-colors shadow-sm flex items-center justify-center"
+            >
               {t.home.cta.getInTouch}
-            </button>
+            </a>
           </nav>
 
           {/* Mobile menu button */}
@@ -190,12 +193,13 @@ interface HeaderProps {
             <div className="flex-1" />
 
             {/* CTA Button */}
-            <button 
+            <a 
+              href="mailto:danilo.dominguez.0416@gmail.com"
               onClick={closeMenu}
-              className="w-full h-12 bg-primary text-background-dark text-sm font-bold rounded-lg hover:bg-blue-400 transition-colors shadow-sm"
+              className="w-full h-12 bg-primary text-background-dark text-sm font-bold rounded-lg hover:bg-blue-400 transition-colors shadow-sm flex items-center justify-center"
             >
               {t.home.cta.getInTouch}
-            </button>
+            </a>
           </div>
         </nav>
       </header>
