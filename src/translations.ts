@@ -489,6 +489,11 @@ export const translations = {
           description:
             "An introduction to software architecture concepts, architectural drivers, reliability, maintainability, and complexity in software design. Covers essential vs accidental complexity and SOLID principles.",
         },
+        {
+          title: "Effective Race Detection for Event-Driven Programs",
+          description:
+            "A presentation on race detection techniques for event-driven systems, particularly web applications. Explores the challenges of identifying race conditions in callback-based architectures and introduces novel approaches using race coverage and chain decomposition for efficient detection.",
+        },
       ],
     },
     // Footer
@@ -1105,6 +1110,11 @@ export const translations = {
           title: "Arquitectura y Diseño de Software",
           description:
             "Una introducción a los conceptos de arquitectura de software, drivers arquitectónicos, fiabilidad, mantenibilidad y complejidad en el diseño de software. Cubre complejidad esencial vs accidental y principios SOLID.",
+        },
+        {
+          title: "Detección Efectiva de Condiciones de Carrera en Programas Basados en Eventos",
+          description:
+            "Una presentación sobre técnicas de detección de condiciones de carrera en sistemas basados en eventos, particularmente aplicaciones web. Explora los desafíos de identificar condiciones de carrera en arquitecturas basadas en callbacks e introduce enfoques novedosos usando cobertura de carreras y descomposición de cadenas para detección eficiente.",
         },
       ],
     },

@@ -6,12 +6,14 @@ import flisol2025Thumbnail from '../assets/talks/flisol-2025-tools-mobile-dev.pn
 import flisol2023Thumbnail from '../assets/talks/flisol-2023-kotlin-coroutines.png';
 import sfd2020Thumbnail from '../assets/talks/sfd-2020-opensource.png';
 import pythonPanama2019Thumbnail from '../assets/talks/pythonpanama-2019-software.png';
+import paperswelove2019Thumbnail from '../assets/talks/paperswelove-2019-event-driven.png';
 
 // Import PDFs
 import flisol2025Pdf from '../assets/talks/flisol-2025-tools-mobile-dev.pdf';
 import flisol2023Pdf from '../assets/talks/flisol-2023-kotlin-coroutines.pdf';
 import sfd2020Pdf from '../assets/talks/sfd-2020-opensource.pdf';
 import pythonPanama2019Pdf from '../assets/talks/pythonpanama-2019-software.pdf';
+import paperswelove2019Pdf from '../assets/talks/paperswelove-2019-event-driven.pdf';
 
 interface Talk {
   id: string;
@@ -81,6 +83,18 @@ const TalksPage: React.FC = () => {
       thumbnail: pythonPanama2019Thumbnail,
       deckUrl: pythonPanama2019Pdf,
       tags: ['Software Architecture', 'Design', 'SOLID', 'Complexity'],
+    },
+    {
+      id: '5',
+      title: page.list[4].title,
+      description: page.list[4].description,
+      event: 'Papers We Love Panamá',
+      date: 'October 2019',
+      year: 2019,
+      location: 'Panama City, Panama',
+      thumbnail: paperswelove2019Thumbnail,
+      deckUrl: paperswelove2019Pdf,
+      tags: ['Research', 'Race Conditions', 'Event-Driven Systems', 'Static Analysis'],
     },
   ].sort((a, b) => b.year - a.year); // Sort by year descending (newest first)
 
