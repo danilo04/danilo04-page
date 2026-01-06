@@ -7,6 +7,207 @@ export const translations = {
       talks: "Talks",
       research: "Research",
       about: "About",
+      aboutMe: "About Me",
+    },
+    // About Me Page (Full Page)
+    aboutPage: {
+      hero: {
+        badge: "Open to Opportunities",
+        name: "Danilo Dominguez, Ph.D.",
+        title: "Senior Mobile & Backend Engineer",
+        summary: "Accomplished Android Engineer with over nine years of experience designing and developing secure, high-performance native Android applications using Kotlin and Java. Specialized in building privacy-focused mobile solutions, with a proven track record of implementing robust sync engines, advanced encryption, and reliable network protocols for scalable, user-trusted apps.",
+        contact: "Contact Me",
+      },
+      profile: {
+        title: "Profile",
+        content: "My doctoral research in static analysis for detecting vulnerabilities in Android apps complements my practical expertise in creating secure, privacy-first applications. At Automattic, I led the development of a sync engine for the Day One Journal app, reducing support tickets and boosting monthly active users by 142%. Proficient in Kotlin and different architectural patterns. A creative problem-solver and collaborative team player, I thrive in taking end-to-end ownership of projects, driving innovation, and mentoring peers.",
+      },
+      experience: {
+        title: "Work Experience",
+        jobs: [
+          {
+            title: "Part-time Professor",
+            company: "Technological University of Panama",
+            location: "Panama City, Panama",
+            period: "2022 – Present",
+            highlights: [
+              "Part-time professor teaching graduate courses on Software Engineering such as Software Quality, Software Architecture, and Data Science courses.",
+            ],
+          },
+          {
+            title: "Senior Software Engineer",
+            company: "Etyalab S.A. (Smartmatic)",
+            location: "Panama City, Panama",
+            period: "June 2025 – November 2025",
+            highlights: [
+              "Contributed to the development of a robust Android-based voter verification system for Smartmatic, implemented in Java and deployed in production environments.",
+              "Designed and implemented a statistics module used across two national elections, ensuring accurate, reliable, and efficient data processing at scale.",
+              "Identified and resolved complex concurrency issues, including subtle race conditions, significantly improving system stability and runtime performance in production.",
+            ],
+          },
+          {
+            title: "Senior Mobile Engineer",
+            company: "Automattic (Day One Journal & Simplenote)",
+            location: "Remote",
+            period: "2021 – 2025",
+            highlights: [
+              "Collaborated closely with iOS and design teams to design, implement, and ship cross-platform features for the Day One and Simplenote mobile apps.",
+              "Designed and implemented a new synchronization engine backed by REST APIs, including end-to-end encryption and resilient networking logic; significantly reduced sync-related support tickets after launch.",
+              "Delivered multiple complex product features that contributed to a 142% increase in monthly active users (MAU).",
+              "Led the migration of a legacy Android codebase to an MVVM architecture using Kotlin, Room, Jetpack Compose, Compose Navigation, Kotlin Coroutines, and Flow.",
+              "Contributed to shared multi-platform libraries using Kotlin Multiplatform (KMP) to improve code reuse and consistency across platforms.",
+            ],
+          },
+          {
+            title: "Senior Software Engineer",
+            company: "ADR Technologies",
+            location: "Remote",
+            period: "2019 – 2021",
+            highlights: [
+              "Led the initial design and architecture of the company's flagship Android application using Kotlin, MVVM, and Jetpack components such as Room and Navigation.",
+              "Implemented complex, business-critical mobile features involving financial and monetary operations, with a strong focus on correctness and reliability.",
+              "Worked in fast-paced, Scrum-based agile teams, collaborating closely with product and backend engineers.",
+              "Diagnosed and resolved multiple integration issues, reducing customer support tickets by approximately 60%.",
+              "Developed backend and mobile features across a Ruby on Rails backend and Android applications.",
+            ],
+          },
+          {
+            title: "Consulting Software Engineer",
+            company: "Crimson Logic Panama Consulting",
+            location: "Panama City, Panama",
+            period: "2019 (4 months)",
+            highlights: [
+              "Implemented new features for total trade solutions for local clients in Panama.",
+            ],
+          },
+          {
+            title: "Research Assistant",
+            company: "Iowa State University",
+            location: "Ames, IA, USA",
+            period: "2013 – 2018",
+            highlights: [
+              "Implemented a static analysis for the Android framework which allowed me to analyze Android applications.",
+              "Developed static analysis tools for Android apps to automatically identify bugs and security vulnerabilities.",
+              "Researched new static analysis and testing techniques for mobile applications.",
+            ],
+          },
+          {
+            title: "Web Developer & Chief Engineer",
+            company: "Technological University of Panama",
+            location: "Panama City, Panama",
+            period: "2006 – 2011",
+            highlights: [
+              "Developed a purchasing system for the Ministry of Education in two stages, similar to the system used by the Panama Canal.",
+              "Developed a CMS using Drupal, creating special modules for interconnection with the Latin American Network of Educational Portals (RELPE).",
+              "Designed the architecture and developed a helpdesk system to manage requests for the university's IT department.",
+              "Taught PHP programming courses for the IT and Communications Department.",
+            ],
+          },
+          {
+            title: "Software Engineer",
+            company: "Excelsys S.A.",
+            location: "Panama City, Panama",
+            period: "2010 (6 months)",
+            highlights: [
+              "Migrated the internet banking platform to a new system using J2EE technology.",
+            ],
+          },
+        ],
+      },
+      education: {
+        title: "Education",
+        degrees: [
+          {
+            degree: "Ph.D. in Computer Science",
+            institution: "Iowa State University",
+            period: "2014 – 2019",
+            details: "Thesis: The Construction and Applications of Callback Control Flow Graphs for Event-Driven and Framework-Based Mobile Apps",
+          },
+          {
+            degree: "M.Sc. in Computer Science",
+            institution: "Rochester Institute of Technology",
+            period: "2011 – 2013",
+            details: "Fulbright Scholar",
+          },
+          {
+            degree: "Systems and Computing Engineering",
+            institution: "Technological University of Panama",
+            period: "2004 – 2009",
+            details: "Graduated with Honors",
+          },
+          {
+            degree: "Postgraduate in Higher Education",
+            institution: "Universidad del Istmo de Panama",
+            period: "2020 – 2021",
+            details: "",
+          },
+        ],
+      },
+      skills: {
+        title: "Skills",
+        categories: [
+          {
+            name: "Mobile Development",
+            items: ["Kotlin", "Java", "Android SDK", "Jetpack Compose", "Kotlin Coroutines", "Kotlin Flows", "Room", "Firebase", "Kotlin Multiplatform (KMP)"],
+          },
+          {
+            name: "Backend & Architecture",
+            items: ["Ruby on Rails", "Python", "J2EE", "REST APIs", "MVVM", "Clean Architecture", "End-to-End Encryption"],
+          },
+          {
+            name: "Databases",
+            items: ["MySQL", "PostgreSQL", "SQLite", "SQLServer", "Redis", "Kafka", "HSQL"],
+          },
+          {
+            name: "Cloud & DevOps",
+            items: ["AWS", "Azure", "Google Cloud", "Docker", "Linux", "MacOS"],
+          },
+          {
+            name: "Web Development",
+            items: ["HTML", "CSS", "JavaScript", "TypeScript", "PHP", "Drupal"],
+          },
+          {
+            name: "Research & Tools",
+            items: ["Static Analysis", "Security Research", "LaTeX", "Academic Writing", "Technical RFCs"],
+          },
+        ],
+      },
+      awards: {
+        title: "Awards & Achievements",
+        list: [
+          { year: "2025", title: "Rock the JVM - Kotlin Coroutines and Concurrency" },
+          { year: "2015", title: "SENACYT-IFARHU Scholarship - Doctorate in Computer Science" },
+          { year: "2011", title: "Fulbright Scholarship - Masters in Computer Science" },
+          { year: "2009", title: "Graduated with Honors - Technological University of Panama" },
+        ],
+      },
+      volunteering: {
+        title: "Volunteering",
+        list: [
+          {
+            organization: "Free Software and Open Source Community in Panama",
+            period: "2009 – Present",
+            description: "Organize events and provide workshops to promote open source technologies.",
+          },
+          {
+            organization: "IEEE Computer Society - Panama Section",
+            period: "2023 – Present",
+            description: "Active member contributing to the local tech community.",
+          },
+        ],
+      },
+      languages: {
+        title: "Languages",
+        list: [
+          { name: "English", level: "Professional proficiency", flag: "🇺🇸" },
+          { name: "Spanish", level: "Native speaker", flag: "🇪🇸" },
+        ],
+      },
+      cta: {
+        title: "Let's Work Together",
+        description: "I'm always interested in hearing about new projects and opportunities. Whether you need help with mobile development, architecture design, or security research, let's connect!",
+        button: "Get In Touch",
+      },
     },
     // Home Page
     home: {
@@ -23,7 +224,7 @@ export const translations = {
         titleLine2: "High-Performance",
         titleLine3: "Mobile Apps",
         description: "Mobile Engineer & PhD Researcher specializing in privacy, robust sync engines, and advanced encryption protocols.",
-        viewResume: "View Resume",
+        viewResume: "About Me",
         contactMe: "Contact Me",
         imageAlt: "Secure Code Visual",
         architecturePreview: "Architecture Preview",
@@ -298,6 +499,207 @@ export const translations = {
       talks: "Charlas",
       research: "Investigación",
       about: "Acerca de",
+      aboutMe: "Sobre Mí",
+    },
+    // About Me Page (Full Page)
+    aboutPage: {
+      hero: {
+        badge: "Abierto a Oportunidades",
+        name: "Danilo Dominguez, Ph.D.",
+        title: "Ingeniero Senior de Móvil y Backend",
+        summary: "Ingeniero Android con más de nueve años de experiencia diseñando y desarrollando aplicaciones Android nativas seguras y de alto rendimiento usando Kotlin y Java. Especializado en construir soluciones móviles enfocadas en la privacidad, con un historial comprobado de implementar motores de sincronización robustos, cifrado avanzado y protocolos de red confiables para aplicaciones escalables y confiables.",
+        contact: "Contáctame",
+      },
+      profile: {
+        title: "Perfil",
+        content: "Mi investigación doctoral en análisis estático para detectar vulnerabilidades en aplicaciones Android complementa mi experiencia práctica en crear aplicaciones seguras y centradas en la privacidad. En Automattic, lideré el desarrollo de un motor de sincronización para la aplicación Day One Journal, reduciendo tickets de soporte y aumentando los usuarios activos mensuales en un 142%. Competente en Kotlin y diferentes patrones arquitectónicos. Un solucionador de problemas creativo y colaborador en equipo, prospero tomando responsabilidad de proyectos de principio a fin, impulsando la innovación y guiando a mis compañeros.",
+      },
+      experience: {
+        title: "Experiencia Laboral",
+        jobs: [
+          {
+            title: "Profesor de Tiempo Parcial",
+            company: "Universidad Tecnológica de Panamá",
+            location: "Ciudad de Panamá, Panamá",
+            period: "2022 – Presente",
+            highlights: [
+              "Profesor de tiempo parcial enseñando cursos de posgrado en Ingeniería de Software como Calidad de Software, Arquitectura de Software y cursos de Ciencia de Datos.",
+            ],
+          },
+          {
+            title: "Ingeniero de Software Senior",
+            company: "Etyalab S.A. (Smartmatic)",
+            location: "Ciudad de Panamá, Panamá",
+            period: "Junio 2025 – Noviembre 2025",
+            highlights: [
+              "Contribuí al desarrollo de un sistema robusto de verificación de votantes basado en Android para Smartmatic, implementado en Java y desplegado en entornos de producción.",
+              "Diseñé e implementé un módulo de estadísticas utilizado en dos elecciones nacionales, asegurando procesamiento de datos preciso, confiable y eficiente a escala.",
+              "Identifiqué y resolví problemas complejos de concurrencia, incluyendo condiciones de carrera sutiles, mejorando significativamente la estabilidad del sistema y el rendimiento en producción.",
+            ],
+          },
+          {
+            title: "Ingeniero Móvil Senior",
+            company: "Automattic (Day One Journal y Simplenote)",
+            location: "Remoto",
+            period: "2021 – 2025",
+            highlights: [
+              "Colaboré estrechamente con equipos de iOS y diseño para diseñar, implementar y lanzar funciones multiplataforma para las aplicaciones móviles Day One y Simplenote.",
+              "Diseñé e implementé un nuevo motor de sincronización respaldado por APIs REST, incluyendo cifrado de extremo a extremo y lógica de red resiliente; reduje significativamente los tickets de soporte relacionados con sincronización después del lanzamiento.",
+              "Entregué múltiples funciones de producto complejas que contribuyeron a un aumento del 142% en usuarios activos mensuales (MAU).",
+              "Lideré la migración de un código base Android heredado a una arquitectura MVVM usando Kotlin, Room, Jetpack Compose, Compose Navigation, Kotlin Coroutines y Flow.",
+              "Contribuí a bibliotecas multiplataforma compartidas usando Kotlin Multiplatform (KMP) para mejorar la reutilización de código y consistencia entre plataformas.",
+            ],
+          },
+          {
+            title: "Ingeniero de Software Senior",
+            company: "ADR Technologies",
+            location: "Remoto",
+            period: "2019 – 2021",
+            highlights: [
+              "Lideré el diseño inicial y la arquitectura de la aplicación Android insignia de la empresa usando Kotlin, MVVM y componentes Jetpack como Room y Navigation.",
+              "Implementé funciones móviles complejas y críticas para el negocio que involucraban operaciones financieras y monetarias, con un fuerte enfoque en corrección y confiabilidad.",
+              "Trabajé en equipos ágiles basados en Scrum de ritmo rápido, colaborando estrechamente con ingenieros de producto y backend.",
+              "Diagnostiqué y resolví múltiples problemas de integración, reduciendo los tickets de soporte al cliente en aproximadamente un 60%.",
+              "Desarrollé funciones de backend y móviles a través de un backend Ruby on Rails y aplicaciones Android.",
+            ],
+          },
+          {
+            title: "Ingeniero de Software Consultor",
+            company: "Crimson Logic Panama Consulting",
+            location: "Ciudad de Panamá, Panamá",
+            period: "2019 (4 meses)",
+            highlights: [
+              "Implementé nuevas funciones para soluciones de comercio total para clientes locales en Panamá.",
+            ],
+          },
+          {
+            title: "Asistente de Investigación",
+            company: "Iowa State University",
+            location: "Ames, IA, EE.UU.",
+            period: "2013 – 2018",
+            highlights: [
+              "Implementé un análisis estático para el framework de Android que me permitió analizar aplicaciones Android.",
+              "Desarrollé herramientas de análisis estático para aplicaciones Android para identificar automáticamente errores y vulnerabilidades de seguridad.",
+              "Investigué nuevas técnicas de análisis estático y pruebas para aplicaciones móviles.",
+            ],
+          },
+          {
+            title: "Desarrollador Web y Jefe de Ingeniería",
+            company: "Universidad Tecnológica de Panamá",
+            location: "Ciudad de Panamá, Panamá",
+            period: "2006 – 2011",
+            highlights: [
+              "Desarrollé un sistema de compras para el Ministerio de Educación en dos etapas, similar al sistema utilizado por el Canal de Panamá.",
+              "Desarrollé un CMS usando Drupal, creando módulos especiales para interconexión con la Red Latinoamericana de Portales Educativos (RELPE).",
+              "Diseñé la arquitectura y desarrollé un sistema de mesa de ayuda para gestionar solicitudes del departamento de TI de la universidad.",
+              "Enseñé cursos de programación PHP para el Departamento de TI y Comunicaciones.",
+            ],
+          },
+          {
+            title: "Ingeniero de Software",
+            company: "Excelsys S.A.",
+            location: "Ciudad de Panamá, Panamá",
+            period: "2010 (6 meses)",
+            highlights: [
+              "Migré la plataforma de banca por internet a un nuevo sistema usando tecnología J2EE.",
+            ],
+          },
+        ],
+      },
+      education: {
+        title: "Educación",
+        degrees: [
+          {
+            degree: "Doctorado en Ciencias de la Computación",
+            institution: "Iowa State University",
+            period: "2014 – 2019",
+            details: "Tesis: La Construcción y Aplicaciones de Grafos de Flujo de Control de Callbacks para Aplicaciones Móviles Basadas en Eventos y Frameworks",
+          },
+          {
+            degree: "Maestría en Ciencias de la Computación",
+            institution: "Rochester Institute of Technology",
+            period: "2011 – 2013",
+            details: "Becario Fulbright",
+          },
+          {
+            degree: "Ingeniería en Sistemas y Computación",
+            institution: "Universidad Tecnológica de Panamá",
+            period: "2004 – 2009",
+            details: "Graduado con Honores",
+          },
+          {
+            degree: "Postgrado en Docencia Superior",
+            institution: "Universidad del Istmo de Panamá",
+            period: "2020 – 2021",
+            details: "",
+          },
+        ],
+      },
+      skills: {
+        title: "Habilidades",
+        categories: [
+          {
+            name: "Desarrollo Móvil",
+            items: ["Kotlin", "Java", "Android SDK", "Jetpack Compose", "Kotlin Coroutines", "Kotlin Flows", "Room", "Firebase", "Kotlin Multiplatform (KMP)"],
+          },
+          {
+            name: "Backend y Arquitectura",
+            items: ["Ruby on Rails", "Python", "J2EE", "REST APIs", "MVVM", "Clean Architecture", "Cifrado de Extremo a Extremo"],
+          },
+          {
+            name: "Bases de Datos",
+            items: ["MySQL", "PostgreSQL", "SQLite", "SQLServer", "Redis", "Kafka", "HSQL"],
+          },
+          {
+            name: "Nube y DevOps",
+            items: ["AWS", "Azure", "Google Cloud", "Docker", "Linux", "MacOS"],
+          },
+          {
+            name: "Desarrollo Web",
+            items: ["HTML", "CSS", "JavaScript", "TypeScript", "PHP", "Drupal"],
+          },
+          {
+            name: "Investigación y Herramientas",
+            items: ["Análisis Estático", "Investigación de Seguridad", "LaTeX", "Escritura Académica", "RFCs Técnicos"],
+          },
+        ],
+      },
+      awards: {
+        title: "Premios y Logros",
+        list: [
+          { year: "2025", title: "Rock the JVM - Kotlin Coroutines y Concurrencia" },
+          { year: "2015", title: "Beca SENACYT-IFARHU - Doctorado en Ciencias de la Computación" },
+          { year: "2011", title: "Beca Fulbright - Maestría en Ciencias de la Computación" },
+          { year: "2009", title: "Graduado con Honores - Universidad Tecnológica de Panamá" },
+        ],
+      },
+      volunteering: {
+        title: "Voluntariado",
+        list: [
+          {
+            organization: "Comunidad de Software Libre y Código Abierto en Panamá",
+            period: "2009 – Presente",
+            description: "Organizo eventos y brindo talleres para promover tecnologías de código abierto.",
+          },
+          {
+            organization: "IEEE Computer Society - Sección Panamá",
+            period: "2023 – Presente",
+            description: "Miembro activo contribuyendo a la comunidad tecnológica local.",
+          },
+        ],
+      },
+      languages: {
+        title: "Idiomas",
+        list: [
+          { name: "Inglés", level: "Competencia profesional", flag: "🇺🇸" },
+          { name: "Español", level: "Nativo", flag: "🇪🇸" },
+        ],
+      },
+      cta: {
+        title: "Trabajemos Juntos",
+        description: "Siempre estoy interesado en escuchar sobre nuevos proyectos y oportunidades. Ya sea que necesites ayuda con desarrollo móvil, diseño de arquitectura o investigación de seguridad, ¡conectemos!",
+        button: "Contáctame",
+      },
     },
     // Home Page
     home: {
@@ -314,7 +716,7 @@ export const translations = {
         titleLine2: "Móviles Seguras y de",
         titleLine3: "Alto Rendimiento",
         description: "Ingeniero Móvil e Investigador PhD especializado en privacidad, motores de sincronización robustos y protocolos de cifrado avanzados.",
-        viewResume: "Ver Currículum",
+        viewResume: "Acerca de Mí",
         contactMe: "Contáctame",
         imageAlt: "Visualización de Código Seguro",
         architecturePreview: "Vista Previa de Arquitectura",

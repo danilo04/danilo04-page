@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
 import { LanguageToggle } from './language-toggle';
 
@@ -11,6 +12,8 @@ interface HeaderProps {
   const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
     const t = useTranslations();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
 
     // Close menu when pressing Escape
     useEffect(() => {
@@ -47,10 +50,14 @@ interface HeaderProps {
           
           <nav className="hidden md:flex flex-1 justify-end items-center gap-4">
             <div className="flex items-center gap-5">
-              <a href="#" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.home}</a>
-              <a href="#about" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.about}</a>
-              <a href="#blog" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.blog}</a>
-              <a href="#research" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.research}</a>
+              <Link to="/" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.home}</Link>
+              <Link to="/about" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.aboutMe}</Link>
+              {isHomePage && (
+                <>
+                  <a href="#blog" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.blog}</a>
+                  <a href="#research" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.research}</a>
+                </>
+              )}
               <a href="#" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.talks}</a>
             </div>
 
@@ -133,34 +140,38 @@ interface HeaderProps {
           <div className="flex flex-col h-full px-6 py-8">
             {/* Navigation links */}
             <div className="flex flex-col gap-2">
-              <a 
-                href="#" 
+              <Link 
+                to="/" 
                 onClick={closeMenu}
                 className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
               >
                 {t.nav.home}
-              </a>
-              <a 
-                href="#about" 
+              </Link>
+              <Link 
+                to="/about" 
                 onClick={closeMenu}
                 className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
               >
-                {t.nav.about}
-              </a>
-              <a 
-                href="#blog" 
-                onClick={closeMenu}
-                className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
-              >
-                {t.nav.blog}
-              </a>
-              <a 
-                href="#research" 
-                onClick={closeMenu}
-                className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
-              >
-                {t.nav.research}
-              </a>
+                {t.nav.aboutMe}
+              </Link>
+              {isHomePage && (
+                <>
+                  <a 
+                    href="#blog" 
+                    onClick={closeMenu}
+                    className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                  >
+                    {t.nav.blog}
+                  </a>
+                  <a 
+                    href="#research" 
+                    onClick={closeMenu}
+                    className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                  >
+                    {t.nav.research}
+                  </a>
+                </>
+              )}
               <a 
                 href="#" 
                 onClick={closeMenu}

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header'
-import Footer from './components/Footer'
-import Hero from './components/Hero'
-import About from './components/About'
-import Blog from './components/Blog'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import cloudflareLogo from './assets/Cloudflare_Logo.svg'
-// import { ThemeToggle } from './components/theme-toggle'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -32,15 +28,18 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-background-dark text-slate-900 dark:text-white transition-colors duration-300 selection:bg-primary/30 selection:text-primary">
-      <Header theme={theme} onToggleTheme={toggleTheme} />
-      <main>
-        <Hero />
-        <About /> 
-        <Blog />
-      </main>
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen bg-slate-50 dark:bg-background-dark text-slate-900 dark:text-white transition-colors duration-300 selection:bg-primary/30 selection:text-primary">
+        <Header theme={theme} onToggleTheme={toggleTheme} />
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 };
 
