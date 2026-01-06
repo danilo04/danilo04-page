@@ -5,6 +5,7 @@ export const translations = {
       home: "Home",
       blog: "Blog",
       talks: "Talks",
+      research: "Research",
       about: "About",
     },
     // Home Page
@@ -295,6 +296,7 @@ export const translations = {
       home: "Inicio",
       blog: "Blog",
       talks: "Charlas",
+      research: "Investigación",
       about: "Acerca de",
     },
     // Home Page
