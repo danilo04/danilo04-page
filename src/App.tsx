@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ResearchPage from './pages/ResearchPage';
+import TalksPage from './pages/TalksPage';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -37,6 +38,7 @@ const App: React.FC = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/research" element={<ResearchPage />} />
+            <Route path="/talks" element={<TalksPage />} />
           </Routes>
         </main>
         <Footer />

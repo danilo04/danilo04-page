@@ -478,6 +478,16 @@ export const translations = {
           description:
             "Exploring Kotlin Coroutines for Android apps. Learn how to use Kotlin Coroutines to build asynchronous and responsive Android apps.",
         },
+        {
+          title: "Open Source Software as a Tool for Research Reproducibility",
+          description:
+            "Exploring how open source software contributes to reproducibility in scientific research. Learn about the role of OSS licensing, development practices, and communities in building trust and enabling collaborative discovery.",
+        },
+        {
+          title: "Software Architecture and Design",
+          description:
+            "An introduction to software architecture concepts, architectural drivers, reliability, maintainability, and complexity in software design. Covers essential vs accidental complexity and SOLID principles.",
+        },
       ],
     },
     // Footer
@@ -1083,6 +1093,16 @@ export const translations = {
           title: "Kotlin Coroutines para Android Apps",
           description:
             "Explorando Kotlin Coroutines para aplicaciones Android. Aprende cómo usar Kotlin Coroutines para construir aplicaciones Android asíncronas y responsivas.",
+        },
+        {
+          title: "Open Source Software como Herramienta en la Reproducibilidad de la Investigación",
+          description:
+            "Explorando cómo el software de código abierto contribuye a la reproducibilidad en la investigación científica. Aprende sobre el rol de las licencias OSS, prácticas de desarrollo y comunidades en la construcción de confianza y descubrimiento colaborativo.",
+        },
+        {
+          title: "Arquitectura y Diseño de Software",
+          description:
+            "Una introducción a los conceptos de arquitectura de software, drivers arquitectónicos, fiabilidad, mantenibilidad y complejidad en el diseño de software. Cubre complejidad esencial vs accidental y principios SOLID.",
         },
       ],
     },
