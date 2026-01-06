@@ -52,11 +52,9 @@ interface HeaderProps {
             <div className="flex items-center gap-5">
               <Link to="/" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.home}</Link>
               <Link to="/about" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.aboutMe}</Link>
+              <Link to="/research" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.research}</Link>
               {isHomePage && (
-                <>
-                  <a href="#blog" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.blog}</a>
-                  <a href="#research" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.research}</a>
-                </>
+                <a href="#blog" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.blog}</a>
               )}
               <a href="#" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.talks}</a>
             </div>
@@ -154,23 +152,21 @@ interface HeaderProps {
               >
                 {t.nav.aboutMe}
               </Link>
+              <Link 
+                to="/research" 
+                onClick={closeMenu}
+                className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+              >
+                {t.nav.research}
+              </Link>
               {isHomePage && (
-                <>
-                  <a 
-                    href="#blog" 
-                    onClick={closeMenu}
-                    className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
-                  >
-                    {t.nav.blog}
-                  </a>
-                  <a 
-                    href="#research" 
-                    onClick={closeMenu}
-                    className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
-                  >
-                    {t.nav.research}
-                  </a>
-                </>
+                <a 
+                  href="#blog" 
+                  onClick={closeMenu}
+                  className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                >
+                  {t.nav.blog}
+                </a>
               )}
               <a 
                 href="#" 

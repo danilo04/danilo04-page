@@ -484,6 +484,132 @@ export const translations = {
     footer: {
       copyright: "All rights reserved.",
     },
+    // Research Page
+    researchPage: {
+      hero: {
+        badge: "Academic Research",
+        title: "Research & Publications",
+        description: "My research focuses on software engineering, specifically the design of program analysis and testing tools to improve the quality of mobile applications. I'm passionate about bridging academic research with practical engineering solutions.",
+        stats: [
+          { value: "10+", label: "Publications" },
+          { value: "50+", label: "Citations" },
+        ],
+      },
+      focus: {
+        title: "Research Focus",
+        areas: [
+          {
+            icon: "🔬",
+            title: "Static Analysis",
+            description: "Developing techniques to analyze Android applications without execution, focusing on callback control flow analysis for event-driven mobile apps.",
+          },
+          {
+            icon: "📊",
+            title: "Callback Control Flow",
+            description: "Researching novel representations for control flow in callback-based and framework-driven mobile applications using Callback Control Flow Graphs (CCFGs).",
+          },
+          {
+            icon: "🧪",
+            title: "Testing Criteria",
+            description: "Designing test coverage criteria based on callback sequences to improve bug detection in Android applications.",
+          },
+          {
+            icon: "📱",
+            title: "Mobile App Testing",
+            description: "Designing automated testing strategies for Android applications, including coverage measurement and test adequacy criteria.",
+          },
+          {
+            icon: "🔄",
+            title: "Event-Driven Systems",
+            description: "Analyzing the unique challenges of event-driven and framework-based mobile application architectures.",
+          },
+          {
+            icon: "🛠️",
+            title: "Developer Tools",
+            description: "Creating practical analysis tools and frameworks that help developers understand and test callback interactions in Android apps.",
+          },
+        ],
+      },
+      thesis: {
+        title: "Doctoral Dissertation",
+        degree: "Ph.D. in Computer Science",
+        name: "The Construction and Applications of Callback Control Flow Graphs for Event-Driven and Framework-Based Mobile Apps",
+        description: "This dissertation presents novel techniques for constructing and utilizing callback control flow graphs (CCFGs) to analyze event-driven mobile applications. The work addresses unique challenges in understanding the execution flow of Android apps, where control is largely driven by callbacks and framework interactions.",
+        institution: "Iowa State University",
+        year: "2019",
+      },
+      publications: {
+        title: "Selected Publications",
+        viewAll: "View Google Scholar",
+        download: "Paper",
+        citations: "citations",
+        list: [
+          {
+            title: "Testing Criteria for Mobile Apps Based on Callback Sequences",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "arXiv",
+            year: "2019",
+            abstract: "This paper introduces a family of test criteria based on callback sequences and uses the Callback Control Flow Automata (CCFA) to measure coverage for testing. Our experiments show that guiding by our criteria, testing can find more bugs and trigger bugs faster than state-of-the-art tools.",
+            link: "https://arxiv.org/abs/1911.09201",
+            citations: 15,
+          },
+          {
+            title: "A Study of Callback Behaviors in Android Applications",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "IEEE ICSME 2018",
+            year: "2018",
+            abstract: "This paper presents an empirical study of callback behaviors in Android applications, analyzing how callbacks interact and share data, which is crucial for understanding app behavior and detecting bugs.",
+            link: "https://ieeexplore.ieee.org/abstract/document/8613913",
+            citations: 20,
+          },
+          {
+            title: "Constructing Callback Control Flow Graphs for Android Apps",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "IEEE ICPC 2017",
+            year: "2017",
+            abstract: "This paper presents techniques for constructing Callback Control Flow Graphs (CCFGs) for Android applications, providing a novel representation for analyzing control flow in event-driven mobile apps.",
+            link: "https://ieeexplore.ieee.org/abstract/document/7972720",
+            citations: 25,
+          },
+          {
+            title: "An Empirical Study of Android Application Behaviors",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "IEEE SCAM 2017",
+            year: "2017",
+            abstract: "This study provides empirical insights into the behavior patterns of Android applications, focusing on callback interactions and their implications for testing and analysis.",
+            link: "https://ieeexplore.ieee.org/abstract/document/7965334",
+            citations: 18,
+          },
+        ],
+      },
+      tools: {
+        title: "Research Tools & Projects",
+        list: [
+          {
+            name: "CCFA (Callback Control Flow Automata)",
+            description: "A novel representation for measuring test coverage based on callback sequences in Android applications.",
+            tags: ["Testing", "Coverage", "Android", "Static Analysis"],
+          },
+          {
+            name: "CCFG Builder",
+            description: "Tools for constructing Callback Control Flow Graphs to analyze event-driven mobile applications.",
+            tags: ["Program Analysis", "Android", "Control Flow"],
+          },
+        ],
+      },
+      collaborators: {
+        title: "Research Collaborators",
+        list: [
+          { name: "Wei Le", affiliation: "Iowa State University" },
+        ],
+      },
+      cta: {
+        title: "Interested in Collaboration?",
+        description: "I'm always open to research collaborations and discussions about mobile app quality, security, and testing. Let's connect and explore how we can advance the field together.",
+        contact: "Get In Touch",
+        scholar: "Google Scholar",
+      },
+    },
     // Common
     common: {
       loading: "Loading...",
@@ -963,6 +1089,132 @@ export const translations = {
     // Footer
     footer: {
       copyright: "Todos los derechos reservados.",
+    },
+    // Research Page
+    researchPage: {
+      hero: {
+        badge: "Investigación Académica",
+        title: "Investigación y Publicaciones",
+        description: "Mi investigación se enfoca en ingeniería de software, específicamente en el diseño de herramientas de análisis de programas y pruebas para mejorar la calidad de aplicaciones móviles. Me apasiona conectar la investigación académica con soluciones prácticas de ingeniería.",
+        stats: [
+          { value: "10+", label: "Publicaciones" },
+          { value: "50+", label: "Citas" },
+        ],
+      },
+      focus: {
+        title: "Enfoque de Investigación",
+        areas: [
+          {
+            icon: "🔬",
+            title: "Análisis Estático",
+            description: "Desarrollo de técnicas para analizar aplicaciones Android sin ejecución, enfocándose en análisis de flujo de control de callbacks para apps móviles orientadas a eventos.",
+          },
+          {
+            icon: "📊",
+            title: "Flujo de Control de Callbacks",
+            description: "Investigación de representaciones novedosas para flujo de control en aplicaciones móviles basadas en callbacks y frameworks usando Grafos de Flujo de Control de Callbacks (CCFGs).",
+          },
+          {
+            icon: "🧪",
+            title: "Criterios de Pruebas",
+            description: "Diseño de criterios de cobertura de pruebas basados en secuencias de callbacks para mejorar la detección de errores en aplicaciones Android.",
+          },
+          {
+            icon: "📱",
+            title: "Pruebas de Apps Móviles",
+            description: "Diseño de estrategias automatizadas de pruebas para aplicaciones Android, incluyendo medición de cobertura y criterios de adecuación de pruebas.",
+          },
+          {
+            icon: "🔄",
+            title: "Sistemas Orientados a Eventos",
+            description: "Análisis de los desafíos únicos de arquitecturas de aplicaciones móviles orientadas a eventos y basadas en frameworks.",
+          },
+          {
+            icon: "🛠️",
+            title: "Herramientas para Desarrolladores",
+            description: "Creación de herramientas de análisis prácticas y frameworks que ayudan a los desarrolladores a entender y probar interacciones de callbacks en apps Android.",
+          },
+        ],
+      },
+      thesis: {
+        title: "Tesis Doctoral",
+        degree: "Doctorado en Ciencias de la Computación",
+        name: "La Construcción y Aplicaciones de Grafos de Flujo de Control de Callbacks para Aplicaciones Móviles Basadas en Eventos y Frameworks",
+        description: "Esta tesis presenta técnicas novedosas para construir y utilizar grafos de flujo de control de callbacks (CCFGs) para analizar aplicaciones móviles orientadas a eventos. El trabajo aborda desafíos únicos para entender el flujo de ejecución de apps Android, donde el control está principalmente dirigido por callbacks e interacciones del framework.",
+        institution: "Iowa State University",
+        year: "2019",
+      },
+      publications: {
+        title: "Publicaciones Seleccionadas",
+        viewAll: "Ver Google Scholar",
+        download: "Artículo",
+        citations: "citas",
+        list: [
+          {
+            title: "Testing Criteria for Mobile Apps Based on Callback Sequences",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "arXiv",
+            year: "2019",
+            abstract: "Este artículo introduce una familia de criterios de prueba basados en secuencias de callbacks y usa los Autómatas de Flujo de Control de Callbacks (CCFA) para medir la cobertura. Nuestros experimentos muestran que guiados por nuestros criterios, las pruebas pueden encontrar más errores y detectarlos más rápido que las herramientas del estado del arte.",
+            link: "https://arxiv.org/abs/1911.09201",
+            citations: 15,
+          },
+          {
+            title: "A Study of Callback Behaviors in Android Applications",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "IEEE ICSME 2018",
+            year: "2018",
+            abstract: "Este artículo presenta un estudio empírico de comportamientos de callbacks en aplicaciones Android, analizando cómo los callbacks interactúan y comparten datos, lo cual es crucial para entender el comportamiento de apps y detectar errores.",
+            link: "https://ieeexplore.ieee.org/abstract/document/8613913",
+            citations: 20,
+          },
+          {
+            title: "Constructing Callback Control Flow Graphs for Android Apps",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "IEEE ICPC 2017",
+            year: "2017",
+            abstract: "Este artículo presenta técnicas para construir Grafos de Flujo de Control de Callbacks (CCFGs) para aplicaciones Android, proporcionando una representación novedosa para analizar el flujo de control en apps móviles orientadas a eventos.",
+            link: "https://ieeexplore.ieee.org/abstract/document/7972720",
+            citations: 25,
+          },
+          {
+            title: "An Empirical Study of Android Application Behaviors",
+            authors: "Danilo Dominguez Perez, Wei Le",
+            venue: "IEEE SCAM 2017",
+            year: "2017",
+            abstract: "Este estudio proporciona conocimientos empíricos sobre los patrones de comportamiento de aplicaciones Android, enfocándose en interacciones de callbacks y sus implicaciones para pruebas y análisis.",
+            link: "https://ieeexplore.ieee.org/abstract/document/7965334",
+            citations: 18,
+          },
+        ],
+      },
+      tools: {
+        title: "Herramientas y Proyectos de Investigación",
+        list: [
+          {
+            name: "CCFA (Autómatas de Flujo de Control de Callbacks)",
+            description: "Una representación novedosa para medir cobertura de pruebas basada en secuencias de callbacks en aplicaciones Android.",
+            tags: ["Pruebas", "Cobertura", "Android", "Análisis Estático"],
+          },
+          {
+            name: "Constructor de CCFG",
+            description: "Herramientas para construir Grafos de Flujo de Control de Callbacks para analizar aplicaciones móviles orientadas a eventos.",
+            tags: ["Análisis de Programas", "Android", "Flujo de Control"],
+          },
+        ],
+      },
+      collaborators: {
+        title: "Colaboradores de Investigación",
+        list: [
+          { name: "Wei Le", affiliation: "Iowa State University" },
+        ],
+      },
+      cta: {
+        title: "¿Interesado en Colaborar?",
+        description: "Siempre estoy abierto a colaboraciones de investigación y discusiones sobre calidad de apps móviles, seguridad y pruebas. Conectemos y exploremos cómo podemos avanzar el campo juntos.",
+        contact: "Contáctame",
+        scholar: "Google Scholar",
+      },
     },
     // Common
     common: {
