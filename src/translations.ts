@@ -22,7 +22,7 @@ export const translations = {
         title: "Profile",
         aboutMe: {
           title: "About Me",
-          content: "I'm a Senior Software Engineer with over 18 years of experience developing Android and cross-platform applications, building robust sync engines, and leading backend integrations at scale. My work blends hands-on development with deep architectural thinking—translating into performant, secure, and maintainable systems used by thousands of users worldwide.",
+          content: "I'm a Senior Software Engineer with over 18 years of experience developing applications, building robust systems, and leading backend integrations at scale. My work blends hands-on development with deep architectural thinking—translating into performant, secure, and maintainable systems used by thousands of users worldwide.",
         },
         whatIDo: {
           title: "What I Do",
@@ -287,7 +287,7 @@ export const translations = {
       },
       section: {
         heading: "Engineering & Research Excellence",
-        summary: "With over 9 years of experience, I specialize in creating secure, native Android applications. My work bridges the gap between academic research in security and practical, high-performance engineering.",
+        summary: "With over 18 years of experience in software development and 9 years in mobile development, I specialize in creating secure, realible and performant applications. My work bridges the gap between academic research in security and practical, high-performance engineering.",
         features: [
           {
             id: "native",
@@ -677,7 +677,7 @@ export const translations = {
         title: "Perfil",
         aboutMe: {
           title: "Sobre Mí",
-          content: "Soy un Ingeniero de Software Senior con más de 18 años de experiencia desarrollando aplicaciones Android y multiplataforma, construyendo motores de sincronización robustos y liderando integraciones de backend a escala. Mi trabajo combina desarrollo práctico con pensamiento arquitectónico profundo—traduciéndose en sistemas performantes, seguros y mantenibles utilizados por miles de usuarios en todo el mundo.",
+          content: "Soy un Ingeniero de Software Senior con más de 18 años de experiencia desarrollando aplicaciones, construyendo sistemas robustos y liderando integraciones de backend a escala. Mi trabajo combina desarrollo práctico con pensamiento arquitectónico profundo—traduciéndose en sistemas performantes, seguros y mantenibles utilizados por miles de usuarios en todo el mundo.",
         },
         whatIDo: {
           title: "Lo Que Hago",
@@ -930,7 +930,7 @@ export const translations = {
       },
       section: {
         heading: "Excelencia en Ingeniería e Investigación",
-        summary: "Con más de 9 años de experiencia, me especializo en crear aplicaciones Android nativas seguras. Mi trabajo conecta la investigación académica en seguridad con la ingeniería práctica de alto rendimiento.",
+        summary: "Con más de 18 años de experiencia en desarrollo de software y 9 años en desarrollo móvil, me especializo en crear aplicaciones seguras, confiables y de alto rendimiento. Mi trabajo conecta la investigación académica en seguridad con la ingeniería práctica de alto rendimiento.",
         features: [
           {
             id: "native",
