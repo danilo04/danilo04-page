@@ -20,7 +20,28 @@ export const translations = {
       },
       profile: {
         title: "Profile",
-        content: "My doctoral research in static analysis for detecting vulnerabilities in Android apps complements my practical expertise in creating secure, privacy-first applications. At Automattic, I led the development of a sync engine for the Day One Journal app, reducing support tickets and boosting monthly active users by 142%. Proficient in Kotlin and different architectural patterns. A creative problem-solver and collaborative team player, I thrive in taking end-to-end ownership of projects, driving innovation, and mentoring peers.",
+        aboutMe: {
+          title: "About Me",
+          content: "I'm a Senior Software Engineer with over 18 years of experience developing Android and cross-platform applications, building robust sync engines, and leading backend integrations at scale. My work blends hands-on development with deep architectural thinking—translating into performant, secure, and maintainable systems used by thousands of users worldwide.",
+        },
+        whatIDo: {
+          title: "What I Do",
+          items: [
+            "Architect encrypted sync engines for mobile apps",
+            "Build scalable APIs and backend systems for real-time data",
+            "Re-architect legacy systems to reduce technical debt",
+            "Lead cross-platform mobile development across Android",
+            "Research and implement advanced static analysis and QA tooling",
+          ],
+        },
+        academicBackground: {
+          title: "Academic Background",
+          content: "I hold a Ph.D. in Computer Science (Software Engineering) from Iowa State University, where my research focused on static analysis and event-driven mobile app behaviors. This academic foundation fuels my analytical approach to engineering challenges and informs my decision-making in high-impact environments.",
+        },
+        whatDrivesMe: {
+          title: "What Drives Me",
+          content: "I'm passionate about clean code, scalable design, and software that empowers users. I thrive in roles that combine technical depth with meaningful impact—especially where there's room to lead, innovate, and continually learn.",
+        },
       },
       experience: {
         title: "Work Experience",
@@ -223,7 +244,7 @@ export const translations = {
         titleLine1: "Building Secure,",
         titleLine2: "High-Performance",
         titleLine3: "Mobile Apps",
-        description: "Mobile Engineer & PhD Researcher specializing in privacy, robust sync engines, and advanced encryption protocols.",
+        description: "Mobile Engineer & PhD Researcher specializing in privacy, robust and reliable systems.",
         viewResume: "About Me",
         contactMe: "Contact Me",
         imageAlt: "Danilo Dominguez Cartoon",
@@ -654,7 +675,28 @@ export const translations = {
       },
       profile: {
         title: "Perfil",
-        content: "Mi investigación doctoral en análisis estático para detectar vulnerabilidades en aplicaciones Android complementa mi experiencia práctica en crear aplicaciones seguras y centradas en la privacidad. En Automattic, lideré el desarrollo de un motor de sincronización para la aplicación Day One Journal, reduciendo tickets de soporte y aumentando los usuarios activos mensuales en un 142%. Competente en Kotlin y diferentes patrones arquitectónicos. Un solucionador de problemas creativo y colaborador en equipo, prospero tomando responsabilidad de proyectos de principio a fin, impulsando la innovación y guiando a mis compañeros.",
+        aboutMe: {
+          title: "Sobre Mí",
+          content: "Soy un Ingeniero de Software Senior con más de 18 años de experiencia desarrollando aplicaciones Android y multiplataforma, construyendo motores de sincronización robustos y liderando integraciones de backend a escala. Mi trabajo combina desarrollo práctico con pensamiento arquitectónico profundo—traduciéndose en sistemas performantes, seguros y mantenibles utilizados por miles de usuarios en todo el mundo.",
+        },
+        whatIDo: {
+          title: "Lo Que Hago",
+          items: [
+            "Arquitecto motores de sincronización encriptados para aplicaciones móviles",
+            "Construyo APIs escalables y sistemas de backend para datos en tiempo real",
+            "Re-arquitecto sistemas legacy para reducir deuda técnica",
+            "Lidero desarrollo móvil multiplataforma en Android",
+            "Investigo e implemento análisis estático avanzado y herramientas de QA",
+          ],
+        },
+        academicBackground: {
+          title: "Antecedentes Académicos",
+          content: "Tengo un Ph.D. en Ciencias de la Computación (Ingeniería de Software) de la Universidad Estatal de Iowa, donde mi investigación se centró en análisis estático y comportamientos de aplicaciones móviles basadas en eventos. Esta base académica alimenta mi enfoque analítico a los desafíos de ingeniería e informa mi toma de decisiones en entornos de alto impacto.",
+        },
+        whatDrivesMe: {
+          title: "Lo Que Me Impulsa",
+          content: "Me apasiona el código limpio, el diseño escalable y el software que empodera a los usuarios. Prospero en roles que combinan profundidad técnica con impacto significativo—especialmente donde hay espacio para liderar, innovar y aprender continuamente.",
+        },
       },
       experience: {
         title: "Experiencia Laboral",
@@ -857,7 +899,7 @@ export const translations = {
         titleLine1: "Construyendo Aplicaciones",
         titleLine2: "Móviles Seguras y de",
         titleLine3: "Alto Rendimiento",
-        description: "Ingeniero Móvil e Investigador PhD especializado en privacidad, motores de sincronización robustos y protocolos de cifrado avanzados.",
+        description: "Ingeniero Móvil e Investigador PhD especializado en privacidad, sistemas robustos y confiables.",
         viewResume: "Acerca de Mí",
         contactMe: "Contáctame",
         imageAlt: "Danilo Dominguez Cartoon",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
 import { LanguageToggle } from './language-toggle';
 
@@ -12,8 +12,6 @@ interface HeaderProps {
   const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
     const t = useTranslations();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const location = useLocation();
-    const isHomePage = location.pathname === '/';
 
     // Close menu when pressing Escape
     useEffect(() => {
@@ -54,9 +52,7 @@ interface HeaderProps {
               <Link to="/about" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.aboutMe}</Link>
               <Link to="/research" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.research}</Link>
               <Link to="/talks" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.talks}</Link>
-              {isHomePage && (
-                <a href="#blog" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.blog}</a>
-              )}
+              <Link to="/blog" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors whitespace-nowrap">{t.nav.blog}</Link>
             </div>
 
             <div className="h-6 w-px bg-slate-200 dark:bg-border-dark mx-1"></div>
@@ -169,15 +165,13 @@ interface HeaderProps {
               >
                 {t.nav.talks}
               </Link>
-              {isHomePage && (
-                <a 
-                  href="#blog" 
-                  onClick={closeMenu}
-                  className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
-                >
-                  {t.nav.blog}
-                </a>
-              )}
+              <Link 
+                to="/blog" 
+                onClick={closeMenu}
+                className="text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary px-4 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+              >
+                {t.nav.blog}
+              </Link>
             </div>
 
             {/* Divider */}

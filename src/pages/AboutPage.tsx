@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslations } from '../hooks/useTranslations';
 import daniloImage from '../assets/danilo-cartoon.png';
 
 const AboutPage: React.FC = () => {
   const t = useTranslations();
   const page = t.aboutPage;
+  const [isProfileExpanded, setIsProfileExpanded] = useState(true);
 
   return (
     <div className="min-h-screen">
@@ -44,7 +45,7 @@ const AboutPage: React.FC = () => {
                 {page.hero.title}
               </p>
               <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-                {page.hero.summary}
+                {page.profile.aboutMe.content}
               </p>
               
               {/* Contact Links */}
@@ -81,18 +82,74 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Profile Section */}
-      <section className="py-20 bg-white dark:bg-slate-900/50">
+      <section className={`bg-white dark:bg-slate-900/50 transition-all duration-300 ${isProfileExpanded ? 'pt-12 pb-20' : 'pt-12 pb-6'}`}>
         <div className="max-w-6xl mx-auto px-4 md:px-10">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div className="flex items-center justify-between gap-3 mb-12">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">{page.profile.title}</h2>
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">{page.profile.title}</h2>
+            <button
+              onClick={() => setIsProfileExpanded(!isProfileExpanded)}
+              className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label={isProfileExpanded ? "Collapse profile section" : "Expand profile section"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`text-slate-600 dark:text-slate-400 transition-transform duration-300 ${isProfileExpanded ? 'rotate-180' : ''}`}
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
           </div>
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
-              {page.profile.content}
-            </p>
+
+          <div className={`space-y-12 overflow-hidden transition-all duration-300 ease-in-out ${isProfileExpanded ? 'max-h-[2000px] opacity-100 mb-0' : 'max-h-0 opacity-0 mb-0'}`}>
+            {/* What I Do */}
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
+                {page.profile.whatIDo.title}
+              </h3>
+              <ul className="space-y-3 max-w-4xl">
+                {page.profile.whatIDo.items.map((item, index) => (
+                  <li key={index} className="flex items-start gap-3 text-lg text-slate-600 dark:text-slate-400">
+                    <svg className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12l5 5l10 -10" />
+                    </svg>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Academic Background */}
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                {page.profile.academicBackground.title}
+              </h3>
+              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-4xl">
+                {page.profile.academicBackground.content}
+              </p>
+            </div>
+
+            {/* What Drives Me */}
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                {page.profile.whatDrivesMe.title}
+              </h3>
+              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-4xl">
+                {page.profile.whatDrivesMe.content}
+              </p>
+            </div>
           </div>
         </div>
       </section>
