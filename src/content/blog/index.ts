@@ -4,11 +4,17 @@ import type { BlogPost, BlogPostFrontmatter, Language, LocalizedBlogPost } from 
 import ReactiveAndroidKotlinFlowsEn, { 
   frontmatter as reactiveAndroidKotlinFlowsEnFrontmatter 
 } from './posts/en/reactive-android-kotlin-flows.mdx';
+import SoftwareQualityMobileAppsEn, { 
+  frontmatter as softwareQualityMobileAppsEnFrontmatter 
+} from './posts/en/software-quality-mobile-apps.mdx';
 
 // Import Spanish MDX posts
 import ReactiveAndroidKotlinFlowsEs, { 
   frontmatter as reactiveAndroidKotlinFlowsEsFrontmatter 
 } from './posts/es/reactive-android-kotlin-flows.mdx';
+import SoftwareQualityMobileAppsEs, { 
+  frontmatter as softwareQualityMobileAppsEsFrontmatter 
+} from './posts/es/software-quality-mobile-apps.mdx';
 
 // All blog posts organized by slug with both languages
 const blogPostsMap: Record<string, LocalizedBlogPost> = {
@@ -20,6 +26,16 @@ const blogPostsMap: Record<string, LocalizedBlogPost> = {
     es: {
       frontmatter: reactiveAndroidKotlinFlowsEsFrontmatter as unknown as BlogPostFrontmatter,
       Content: ReactiveAndroidKotlinFlowsEs,
+    },
+  },
+  'software-quality-mobile-apps': {
+    en: {
+      frontmatter: softwareQualityMobileAppsEnFrontmatter as unknown as BlogPostFrontmatter,
+      Content: SoftwareQualityMobileAppsEn,
+    },
+    es: {
+      frontmatter: softwareQualityMobileAppsEsFrontmatter as unknown as BlogPostFrontmatter,
+      Content: SoftwareQualityMobileAppsEs,
     },
   },
 };

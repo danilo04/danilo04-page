@@ -1,5 +1,6 @@
 import React from 'react';
 import { MDXProvider as BaseMDXProvider } from '@mdx-js/react';
+import Mermaid from './Mermaid';
 
 // Custom components for MDX rendering
 const components = {
@@ -76,12 +77,29 @@ const components = {
   },
   
   // Pre (code blocks)
-  pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
-    <pre 
-      className="my-6 p-4 md:p-6 rounded-xl overflow-x-auto bg-slate-900 dark:bg-slate-950 shadow-lg" 
-      {...props} 
-    />
-  ),
+  pre: (props: React.HTMLAttributes<HTMLPreElement>) => {
+    const child = React.Children.toArray(props.children)[0];
+    if (React.isValidElement(child)) {
+      const className = (child.props as { className?: string }).className;
+      if (className?.includes('language-mermaid')) {
+        const rawChart = (child.props as { children?: React.ReactNode }).children;
+        const chart =
+          typeof rawChart === 'string'
+            ? rawChart.trim()
+            : Array.isArray(rawChart)
+              ? rawChart.join('').trim()
+              : '';
+        return <Mermaid chart={chart} />;
+      }
+    }
+
+    return (
+      <pre 
+        className="my-6 p-4 md:p-6 rounded-xl overflow-x-auto bg-slate-900 dark:bg-slate-950 shadow-lg" 
+        {...props} 
+      />
+    );
+  },
   
   // Table
   table: (props: React.HTMLAttributes<HTMLTableElement>) => (
