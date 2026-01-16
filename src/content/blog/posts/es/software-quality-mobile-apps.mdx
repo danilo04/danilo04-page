@@ -32,37 +32,65 @@ La importancia de la calidad de software puede verse claramente en aplicaciones 
 
 En el caso de las aplicaciones móviles, la calidad de software es crítica porque existe una gran competencia en el mercado. Si un usuario percibe mala calidad (crashes, bugs, pantallas lentas), tiende a abandonar la app, dejar una mala reseña y no volver. Eso afecta el posicionamiento en la tienda, reduce descargas orgánicas y eleva el costo de adquisición de usuarios.
 
-Un estudio realizado por la empresa Bugsnag en 2021 encontró una correlación entre las aplicaciones con alta estabilidad (99% de sesiones crash-free) y altos ratings en las tiendas. Esto nos dice que la calidad de software es un factor clave para el éxito de tu aplicación.
-
-![Impacto de app ratings bajos](/app-ratings-low.svg)
+Un [estudio realizado por la empresa Bugsnag en 2021](https://smartbear.com/news/news-releases/bugsnag-application-stability-index-report-reveals/) encontró una correlación entre las aplicaciones con alta estabilidad (99% de sesiones crash-free) y altos ratings en las tiendas. Esto nos dice que la calidad de software es un factor clave para el éxito de tu aplicación.
 
 **Calidad no es solo “no tener bugs”**. También incluye: rendimiento, accesibilidad, seguridad, diseño consistente y una experiencia predecible bajo condiciones reales (batería baja, red intermitente, versiones antiguas).
 
 ## Retos en el desarrollo de aplicaciones móviles
 
-En su libro "Building Mobile Apps at Scale", Gergely Orosz describe una serie de retos frecuentes en móvil. Algunos de los más relevantes son:
+En su libro ["Building Mobile Apps at Scale"](https://www.mobileatscale.com/), Gergely Orosz describe una serie de retos (39 en la últma versión) frecuentes en móvil. Algunos de los más relevantes son:
 
 - La larga cola de versiones antiguas
 - Conectividad inestable y offline
 - Crashes y ANRs
 - Manejo de estado complejo y múltiples fuentes de datos
-- Diferencias de hardware (RAM, CPU, tamaño de pantalla)
+- Diferencias de hardware y sistema operativo (fragmentación)
 
 ### La larga cola de las versiones antiguas de las aplicaciones
 
-La larga cola de versiones antiguas es un reto importante. Los usuarios pueden permanecer semanas (o meses) sin actualizar. Eso obliga a mantener compatibilidad con APIs viejas, schemas de datos y flujos que ya no están en el roadmap. Un buen proceso de *release* debe tener estrategias de migración gradual y comunicación con backend.
+La larga cola de versiones antiguas es un reto importante. Los usuarios pueden permanecer semanas (o meses) sin actualizar. Eso obliga a mantener compatibilidad con APIs viejas, schemas de datos y flujos que ya no están en el roadmap. Un buen proceso de *release* debe tener estrategias de migración gradual y comunicación con backend. Ántes de que la nueva versión sea publicada en producción, se debe tener un plan de migración gradual para que cualquier tipo de error crítico sea detectado y corregido antes de que el usuarios en producción lo noten. 
+
+Existen aplicaciones, como por ejemplo aplicaciones bancarias, que bloquean la aplicación si los usuarios no han actualizado a la última versión. También las tiendas están lanzando nuevos features que ayudan a los usuarios a actualizar a la última versión de la aplicación. Por ejemplo, Google Play ofrece ["In-app updates"](https://developer.android.com/guide/playcore/in-app-updates) para que los usuarios puedan actualizar la aplicación sin tener que descargar la nueva versión desde la tienda.
+
 
 ### Conectividad intermitente
 
-La experiencia real incluye túneles, ascensores, áreas sin señal o redes saturadas. Tu app debe manejar *timeouts*, *retry with backoff*, cache local y estados offline sin bloquear la UI.
+Cuando desarrollas una aplicación móvil, debes tener en cuenta que la conectividad es variable y que el usuario puede estar en cualquier parte del mundo. Por lo tanto, tu aplicación debe ser capaz de manejar la conectividad intermitente y offline. La experiencia real incluye túneles, ascensores, áreas sin señal o redes saturadas. Si no se maneja correctamente la conectividad, se puede presentar un estado de la aplicación que no es el esperado por el usuario o simplemente ofrecer una experiencia de usuario (UX) pobre. 
+
+
+Tu app debe manejar múltiples aspectos críticos de la conectividad sin bloquear la UI:
+
+**Timeouts**: Define tiempos de espera apropiados para cada operación de red (típicamente 5-30 segundos dependiendo de la acción). Sin timeouts, las operaciones pueden quedarse colgadas indefinidamente, consumiendo recursos y degradando la experiencia. Implementa timeouts diferentes según la criticidad: operaciones rápidas como búsquedas deben fallar rápido, mientras que descargas pesadas pueden tener ventanas más largas.
+
+**Retry with backoff**: Cuando una petición falla (por timeout o error de red), no intentes inmediatamente de nuevo. Implementa una estrategia de reintentos con backoff exponencial (ej: esperar 1s, luego 2s, luego 4s antes de reintentar). Esto evita saturar la red cuando hay problemas temporales y reduce el consumo de batería. Limita el número máximo de intentos (3-5 típicamente) para evitar bucles infinitos.
+
+**Cache local**: Guarda datos críticos localmente para permitir que la app funcione offline o con conexión lenta. Estrategias comunes incluyen cache de respuestas HTTP (con validación de stale-while-revalidate), cache de imágenes y assets, y persistencia de estado de la app. El cache debe tener una política de invalidación clara: datos sensibles al tiempo (como precios) deben refrescarse frecuentemente, mientras que contenido estático puede persistir por días.
+
+**Estados offline**: Diseña tu app para detectar y manejar explícitamente la falta de conectividad. Muestra indicadores visuales claros cuando el usuario está offline, permite operaciones que pueden hacerse localmente (lectura, edición de formularios), y sincroniza cambios pendientes cuando la conectividad se restaura. Implementa colas de operaciones pendientes para acciones que requieren red.
+
+**Sin bloquear la UI**: Todas estas operaciones deben ejecutarse en hilos en segundo plano o de forma asíncrona. El hilo principal (UI thread) nunca debe esperar operaciones de red. Usa callbacks, promesas o corrutinas según tu stack tecnológico, y muestra estados de carga apropiados sin congelar la interfaz. [Kotlin coroutines](https://kotlinlang.org/docs/coroutines-overview.html) es una excelente opción para manejar la asincronía en Android. Ofrece una API de alto nivel para manejar la asincronía de manera sencilla y eficiente.
+
+La experiencia del usuario debe ser consistente independientemente de la conectividad: la app debe sentirse responsiva y predecible tanto con 5G como con WiFi lento o sin conexión. Un usuario en un túnel debe poder seguir navegando contenido previamente cargado sin notar diferencias abruptas. 
+
 
 ### Crashes y ANRs
 
-Un crash puede ocurrir por falta de memoria, errores de concurrencia o dependencias externas. En Android, los ANRs (Application Not Responding) destruyen la experiencia. La calidad exige monitoreo continuo y límites de tiempo para operaciones pesadas.
+Un **crash** es una falla inesperada que hace que la aplicación se cierre abruptamente sin una notificación previa al usuario. Es decir, la app deja de funcionar y el sistema operativo la termina forzosamente. Un crash puede ocurrir por falta de memoria, errores de concurrencia o dependencias externas o un Null Pointer Exception. 
+
+En Android, los **ANRs (Application Not Responding)** representan un bloqueo de la aplicación por más de 5 segundos en el cuál el usuario no puede interactuar con la aplicación. Esto destruye completamente la experiencia del usuario con su aplicación. Este tipo de errores son críticos y deben ser monitoreados continuamente porque pueden afectar a gran cantidad de usuarios, lo que conlleva que los mismos usuarios no vuelvan a usar la aplicación y dejen una mala reseña en la tienda.
+
+La calidad exige monitoreo continuo y límites de tiempo para operaciones pesadas.
 
 ### Manejo de estado complejo
 
-En móvil convivimos con múltiples capas: UI, cache local, red, push notifications y deep links. Sin una estrategia clara de estado (unidireccional, fuentes de verdad), aparecen inconsistencias difíciles de depurar.
+A diferencia del desarrollo web y backend, donde el ciclo de vida de la aplicación no es un problema crítico, en móvil debemos manejar constantes transiciones de ciclo de vida. La aplicación puede ser enviada al background cuando el usuario cambia a otra app, y luego regresar al foreground cuando vuelve. Más aún, el sistema operativo puede recuperar memoria cuando hay presión, lo que en algunos casos termina la aplicación por completo. Cuando el usuario vuelve a abrirla, la app debe restaurar su estado previo de manera transparente.
+
+![Manejo de estado complejo en móvil](/app-state-management.png)
+
+*Imagen de ["Building Mobile Apps at Scale"](https://www.mobileatscale.com/)*
+
+En móvil convivimos con múltiples capas: UI, cache local, red, push notifications y deep links. Sin una estrategia clara de estado (unidireccional, fuentes de verdad), aparecen inconsistencias difíciles de depurar. La mayoría de bugs y crashes pasan por
+combinaciones de eventos no esperadas o no probadas 
 
 ## Mejorando la calidad de software en mi aplicación móvil
 
@@ -97,6 +125,34 @@ gantt
   Producción (rollout)   :2026-01-17, 3d
   Observación + hotfixes :2026-01-20, 2d
 ```
+
+#### Google Play Console (Android)
+
+Google Play ofrece un sistema completo de tracks para despliegues por etapas:
+
+- **Internal testing**: Hasta 100 testers internos. Los builds están disponibles inmediatamente sin revisión de Google. Ideal para pruebas del equipo de desarrollo y QA.
+- **Closed testing (Alpha/Beta)**: Permite crear grupos cerrados de usuarios por email o Google Groups. Los builds pasan por una revisión rápida. Útil para pruebas con stakeholders o usuarios de confianza.
+- **Open testing**: Cualquier usuario puede unirse al programa de pruebas desde la página de la app en Play Store. Bueno para obtener feedback de una audiencia más amplia antes del lanzamiento general.
+- **Staged rollouts**: Una vez en producción, puedes liberar a un porcentaje de usuarios (1%, 5%, 10%, 50%, etc.) y aumentar gradualmente. Si detectas problemas en el monitoreo, puedes pausar el rollout o hacer rollback a la versión anterior.
+
+Google Play Console también proporciona métricas de Android Vitals (crash rate, ANR rate, battery usage) que te permiten comparar la estabilidad entre versiones durante el rollout.
+
+#### App Store Connect (iOS)
+
+Apple ofrece herramientas similares a través de TestFlight y phased releases:
+
+- **TestFlight Internal**: Hasta 100 miembros del equipo con rol de App Manager, Developer, Marketer o Admin. Los builds están disponibles inmediatamente después de procesarse.
+- **TestFlight External**: Hasta 10,000 testers externos por app. Requiere revisión de Apple (generalmente 24-48 horas para el primer build de un grupo). Puedes crear múltiples grupos con diferentes builds.
+- **Phased Release**: Al publicar en producción, puedes activar "Phased Release for Automatic Updates" que distribuye la actualización gradualmente durante 7 días (1%, 2%, 5%, 10%, 20%, 50%, 100%). Los usuarios que buscan actualizaciones manualmente la obtienen inmediatamente, pero las actualizaciones automáticas se distribuyen gradualmente. Puedes pausar el rollout si detectas problemas.
+
+TestFlight permite recopilar feedback directo de los testers a través de la app, incluyendo screenshots y comentarios, lo que facilita identificar problemas antes de producción.
+
+#### Recomendaciones para ambas plataformas
+
+1. **Automatiza la distribución**: Usa herramientas como Fastlane para subir builds automáticamente a los tracks de testing desde tu CI/CD.
+2. **Define criterios de promoción**: Establece métricas mínimas (crash-free rate > 99.5%, no P0 bugs) antes de avanzar al siguiente track.
+3. **Monitorea activamente durante rollouts**: Ten dashboards listos con las métricas clave y alertas configuradas para detectar regresiones.
+4. **Documenta el proceso de rollback**: Asegúrate de que cualquier miembro del equipo pueda pausar un rollout o revertir a una versión anterior si es necesario.
 
 ### 2) Mantener alta mantenibilidad del código
 
