@@ -15,11 +15,6 @@
 	},
 	"d1_databases": [
 		{
-			"binding": "DB",
-			"database_name": "danilo04-db",
-			"database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
-		},
-		{
 			"binding": "danilo04_db",
 			"database_name": "danilo04-db",
 			"database_id": "b8705498-44ef-4477-9432-5669ee72618c"
