@@ -4,6 +4,7 @@ import { useTranslations } from '../hooks/useTranslations';
 import { useLanguage } from '../components/language-provider';
 import { getPostBySlug, getRelatedPosts } from '../content/blog';
 import { MDXProvider } from '../components/MDXProvider';
+import { BlogInteractions } from '../components/BlogInteractions';
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -142,6 +143,9 @@ const BlogPostPage: React.FC = () => {
             <Content />
           </MDXProvider>
         </article>
+
+        {/* Likes and Comments */}
+        <BlogInteractions slug={post.frontmatter.slug} />
 
         {/* Share Section */}
         <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700">
