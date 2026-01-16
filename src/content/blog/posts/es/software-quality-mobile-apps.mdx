@@ -6,7 +6,7 @@ category: mobile
 coverImage: /software-quality-mobile-header.svg
 author: Danilo Dominguez
 date: 2026-01-14
-readTime: 15 min de lectura
+readTime: 20 min de lectura
 tags:
   - Calidad
   - Mobile
@@ -161,6 +161,10 @@ La calidad empieza con un código fácil de cambiar sin miedo. Esto incluye:
 - Módulos bien definidos y bajo acoplamiento
 - Dependencias actualizadas y con versiones controladas
 
+A medida que la aplicación crece, es importante mantener la mantenibilidad del código. Esto implica que el código debe ser fácil de entender, de mantener y de cambiar. Las aplicaciones móviles son desarrolladas como monolitos, pero es importante que el código sea modularizable para que se pueda mantener y cambiar fácilmente. Esto permite que el equipo de desarrollo pueda trabajar en diferentes partes de la aplicación de manera independiente y sin afectar el resto de la aplicación y también mejora la experiencia de desarrollo (DX) ya que, si modularizado correctamente, los tiempos de compilación y pruebas pueden reducirse cuando se trabaja sobre el proyecto. 
+
+El uso de herramientas de análisis estático y de linting ayuda a mantener el código limpio y libre de errores. Herramientas como [SonarQube](https://www.sonarqube.org/), [Detekt](https://github.com/detekt/detekt) y [Android Lint](https://developer.android.com/studio/write/lint) son excelentes opciones para mantener el código limpio y libre de errores obvios. Estas herramientas permiten extenderlas con sus propias reglas y métricas que se ajustan a las necesidades de su equipo y aplicación. 
+
 ### 3) Suite de pruebas robusta (pirámide de testing)
 
 No necesitas tests de UI para todo. Una estrategia balanceada reduce costos y aumenta confianza:
@@ -168,23 +172,185 @@ No necesitas tests de UI para todo. Una estrategia balanceada reduce costos y au
 - **Integración** para bases de datos y APIs
 - **End-to-end** para flujos críticos (login, pago, onboarding)
 
+![Pirámide de testing](/testing-pyramid.png)
+
+*Imagen de ["Your QA tester’s hierarchy of needs: what is the agile testing pyramid?"](https://www.onpathtesting.com/blog/qa-testers-what-is-the-agile-testing-pyramid/)*
+
 ```mermaid
 flowchart TB
   U[Unit tests<br/>Rápidos y baratos] --> I[Integration tests<br/>Cobertura de capas]
   I --> E[E2E/UI tests<br/>Críticos, más lentos]
 ```
 
+#### Screenshot Testing
+
+Una técnica complementaria a la pirámide de testing es el **screenshot testing** (también conocido como snapshot testing visual). Consiste en renderizar componentes de UI y compararlos pixel a pixel contra imágenes de referencia ("golden images"). Si hay diferencias, el test falla y genera un diff visual que muestra exactamente qué cambió.
+
+**¿Por qué usar screenshot testing?**
+
+- **Detecta regresiones visuales** que los tests unitarios no pueden capturar (cambios de colores, márgenes, tipografías, layouts rotos).
+- **Documenta visualmente** cómo se ven los componentes en diferentes estados (loading, error, vacío, con datos).
+- **Más rápido que E2E**: los screenshots se generan sin necesidad de un dispositivo físico o emulador completo, ejecutándose como tests unitarios.
+- **Facilita code reviews**: los revisores pueden ver exactamente cómo afectan los cambios a la UI.
+
+**Paparazzi (Android)**
+
+[Paparazzi](https://github.com/cashapp/paparazzi) es una librería de Cash App que permite renderizar pantallas Android sin necesidad de un dispositivo físico o emulador. Utiliza el layoutlib de Android Studio para generar screenshots directamente en la JVM.
+
+```kotlin
+class LaunchViewTest {
+  @get:Rule
+  val paparazzi = Paparazzi(
+    deviceConfig = PIXEL_5,
+    theme = "android:Theme.Material.Light.NoActionBar"
+  )
+
+  @Test
+  fun launchComposable() {
+    paparazzi.snapshot {
+      MyComposable()
+    }
+  }
+}
+```
+
+Con Paparazzi puedes:
+- Grabar snapshots de referencia con `./gradlew recordPaparazziDebug`
+- Verificar contra los snapshots existentes con `./gradlew verifyPaparazziDebug`
+- Ver diffs visuales cuando hay diferencias en `build/paparazzi/failures`
+
+**SnapshotTesting (iOS)**
+
+[SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing) de Point-Free es la librería de referencia para screenshot testing en iOS. Es altamente flexible y permite hacer snapshots no solo de vistas, sino también de cualquier tipo de dato (JSON, strings, etc.).
+
+```swift
+import SnapshotTesting
+import XCTest
+
+class MyViewControllerTests: XCTestCase {
+  func testMyViewController() {
+    let vc = MyViewController()
+    
+    assertSnapshot(of: vc, as: .image(on: .iPhone13))
+  }
+  
+  func testMySwiftUIView() {
+    let view = MySwiftUIView()
+    
+    assertSnapshot(of: view, as: .image(layout: .device(config: .iPhone13)))
+  }
+}
+```
+
+La librería soporta múltiples estrategias de snapshot:
+- `.image`: captura visual de la vista
+- `.recursiveDescription`: descripción jerárquica de la vista (útil para accesibilidad)
+- `.json`, `.dump`: para snapshots de datos estructurados
+
+**Recomendaciones para screenshot testing**
+
+1. **Usa Git LFS** para almacenar las imágenes de referencia, ya que pueden crecer rápidamente y afectar el rendimiento del repositorio.
+2. **Organiza los snapshots por componente** para facilitar la revisión y mantenimiento.
+3. **Testea estados clave**: no solo el estado "happy path", sino también loading, error, vacío y edge cases visuales.
+4. **Integra en CI/CD**: ejecuta los tests de screenshots en cada PR para detectar regresiones antes del merge.
+5. **Actualiza snapshots intencionalmente**: cuando cambies la UI a propósito, actualiza los snapshots y documenta el cambio en el PR.
+
 ### 4) Feature flags + cambios pequeños y frecuentes
 
-Implementar funcionalidades detrás de flags permite lanzar sin exponer a todos los usuarios. Además, cambios pequeños reducen el riesgo y facilitan el rollback.
+Implementar funcionalidades detrás de flags permite lanzar código a producción sin exponer la funcionalidad a todos los usuarios. Un **feature flag** es simplemente una condición en el código que determina si una funcionalidad está activa o no, controlada remotamente o por configuración.
+
+```kotlin
+// Ejemplo simplificado de feature flag
+if (featureFlags.isEnabled("new_checkout_flow")) {
+    showNewCheckoutFlow()
+} else {
+    showLegacyCheckoutFlow()
+}
+```
+
+#### Feature flags y trunk-based development
+
+Los feature flags son especialmente poderosos cuando se combinan con **trunk-based development**, una estrategia donde todos los desarrolladores trabajan directamente sobre la rama principal (main/trunk) en lugar de crear feature branches de larga duración.
+
+**El problema de los feature branches largos:**
+
+Cuando una funcionalidad toma semanas o meses en desarrollarse, el feature branch diverge significativamente de main. Esto genera:
+- **Merge conflicts masivos**: mientras más tiempo pasa, más cambios se acumulan en ambas ramas y más difícil es reconciliarlos.
+- **Integración tardía de bugs**: los problemas de integración solo se descubren al momento del merge, cuando ya es costoso corregirlos.
+- **Riesgo elevado**: un merge grande introduce muchos cambios a la vez, aumentando la probabilidad de regresiones.
+- **Bloqueo del equipo**: otros desarrolladores no pueden beneficiarse de refactors o mejoras hasta que el branch se mergee.
+
+**La solución: trunk-based development + feature flags**
+
+Con esta combinación, puedes:
+1. **Hacer commits pequeños y frecuentes a main**: cada cambio es incremental y fácil de revisar.
+2. **Ocultar funcionalidades incompletas**: el código está en producción pero desactivado detrás de un flag.
+3. **Integrar continuamente**: los conflictos se resuelven diariamente en lugar de acumularse.
+4. **Activar gradualmente**: cuando la funcionalidad está lista, activas el flag para un porcentaje de usuarios y monitoreas.
+
+```mermaid
+flowchart LR
+    A[Commit pequeño] --> B[CI/CD]
+    B --> C[Deploy a producción]
+    C --> D{Feature flag}
+    D -->|Flag OFF| E[Funcionalidad oculta]
+    D -->|Flag ON| F[Funcionalidad visible]
+    F --> G[Rollout gradual: 5% → 25% → 100%]
+```
+
+#### Tipos de feature flags
+
+- **Release flags**: controlan el lanzamiento de nuevas funcionalidades. Se eliminan una vez que la funcionalidad está al 100%.
+- **Experiment flags**: para A/B testing y experimentos. Permiten medir el impacto de cambios.
+- **Ops flags**: "kill switches" para desactivar funcionalidades problemáticas en producción sin necesidad de deploy.
+- **Permission flags**: controlan acceso a funcionalidades premium o por tipo de usuario.
+
+#### Herramientas para feature flags
+
+- **Firebase Remote Config**: integrado con el ecosistema Firebase, gratis para volúmenes moderados.
+- **LaunchDarkly**: plataforma robusta con targeting avanzado, ideal para equipos grandes.
+- **Unleash**: open source, self-hosted, buena opción si necesitas control total.
+- **Implementación propia**: para casos simples, un endpoint en tu backend puede ser suficiente.
+
+#### Recomendaciones
+
+1. **Limpia los flags obsoletos**: los feature flags tienen un costo de mantenimiento. Una vez que una funcionalidad está al 100%, elimina el flag y el código legacy.
+2. **Documenta cada flag**: mantén un registro de qué hace cada flag, quién lo creó y cuándo debería eliminarse.
+3. **Testea ambos estados**: asegúrate de que tu suite de pruebas cubra tanto el caso con flag ON como OFF.
+4. **No abuses**: demasiados flags activos simultáneamente crean complejidad. Mantén el número manejable.
 
 ### 5) Monitoreo y observabilidad
 
-Es difícil detectar todos los fallos antes del release. Por eso, necesitas monitoreo de:
-- Crashes y ANRs
-- Errores de red
-- Métricas de performance (cold start, tiempo de render)
-- Eventos de negocio (funnel, conversiones)
+Es difícil detectar todos los fallos antes del release. Por más completa que sea tu suite de pruebas, los usuarios encontrarán combinaciones de dispositivos, versiones de OS y condiciones de red que no anticipaste. Por eso, necesitas monitoreo continuo de:
+
+- **Crashes y ANRs**: captura automática de excepciones con stack traces completos y contexto del dispositivo.
+- **Errores de red**: timeouts, respuestas HTTP erróneas, fallos de conectividad.
+- **Métricas de performance**: cold start, tiempo de render, uso de memoria, consumo de batería.
+- **Eventos de negocio**: funnel de conversión, tasas de abandono, features más usados.
+
+#### Herramientas de crash reporting
+
+**[Sentry](https://sentry.io/)**: plataforma de monitoreo de errores que soporta múltiples plataformas (Android, iOS, React Native, Flutter). Captura crashes, errores no fatales y permite agregar breadcrumbs (rastros de navegación del usuario antes del error). Ofrece agrupación inteligente de errores similares y alertas configurables.
+
+**[Bugsnag](https://www.bugsnag.com/)**: similar a Sentry, con fuerte enfoque en estabilidad móvil. Proporciona el "Application Stability Score" que mide el porcentaje de sesiones sin crashes. Integra bien con herramientas de CI/CD para correlacionar releases con cambios en estabilidad.
+
+**[Firebase Crashlytics](https://firebase.google.com/products/crashlytics)**: solución gratuita de Google, integrada con el ecosistema Firebase. Ideal si ya usas Firebase para analytics, remote config o push notifications. Ofrece reportes en tiempo real, agrupación automática de crashes y métricas de usuarios afectados.
+
+#### Herramientas de performance monitoring
+
+**[Firebase Performance Monitoring](https://firebase.google.com/products/performance)**: mide automáticamente tiempos de inicio, renderizado de pantallas y latencia de red. Permite crear traces personalizados para medir operaciones específicas.
+
+**[Sentry Performance](https://sentry.io/for/performance/)**: además de crash reporting, Sentry ofrece monitoreo de transacciones y traces distribuidos para entender el performance end-to-end.
+
+**Android Vitals y App Store Connect Metrics**: las propias tiendas ofrecen métricas de calidad. Google Play Console muestra crash rate, ANR rate, y métricas de batería/wake locks. App Store Connect muestra crashes, hang rate y métricas de disco/memoria.
+
+#### Recomendaciones para monitoreo efectivo
+
+1. **Configura alertas proactivas**: no esperes a que los usuarios reporten. Configura alertas cuando el crash rate supere un umbral o cuando aparezca un nuevo tipo de error.
+2. **Incluye contexto útil**: agrega información como versión de la app, tipo de usuario, pantalla actual y acciones recientes (breadcrumbs).
+3. **Prioriza por impacto**: no todos los crashes son iguales. Enfócate primero en los que afectan más usuarios o en flujos críticos.
+4. **Correlaciona con releases**: usa las integraciones con CI/CD para saber exactamente qué commit introdujo una regresión.
+5. **Revisa métricas regularmente**: incluye la revisión de crash rate y ANR rate en tus rituales de equipo (daily, weekly).
 
 ### 6) Seguridad y privacidad desde el diseño
 
