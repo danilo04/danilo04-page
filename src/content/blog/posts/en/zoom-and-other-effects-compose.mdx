@@ -1,0 +1,187 @@
+---
+slug: zoom-and-other-effects-compose
+title: Zoom and other effects in Compose
+summary: In this article, we will explore the effects such as pinch zoom and panning in Compose.
+category: mobile
+coverImage: /zoom-compose-cover.png
+author: Danilo Dominguez
+date: 2026-01-23
+readTime: 10 min read
+tags:
+  - Quality
+  - Mobile
+  - Testing
+  - Static analysis
+  - Security
+  - CI/CD
+  - QA
+published: true
+---
+
+In this article, we will explore the implement of effects of pinch zoom in Compose and try to understand the different APIs that we can use to achieve this. Some of the effects that we will explore are:
+- Pinch zoom: is a common gesture in mobile applications. It is used to zoom in and out of a view. 
+- Panning: is a common gesture in mobile applications. It is used to move a view around.
+
+## The GraphicsLayer API
+
+Le us introduce one component that we will use to apply the effects: the **GraphicsLayer**. GraphicsLayer is a drawing layer that records drawing commands into a display list and stores rendering properties. It isolates parts of a scene so they can be updated independently without rebuilding the whole scene. Transformations can be applied without re-recording the display list.
+
+
+When drawing the display list into a destination Canvas, you can apply transformations by setting `scaleX`, `scaleY`, `translationX`, `translationY`, `rotationX`, `rotationY`, or `rotationZ`.
+
+Imagine we have an Imagen that we want to apply a zoom effect to. We can control the zoom effect by setting the `scaleX` and `scaleY` properties.
+```kotlin
+Image(
+    ... // other properties
+    modifier = Modifier.graphicsLayer {
+        scaleX = 2f
+        scaleY = 2f
+    }
+)
+```
+
+In this example, we are setting the `scaleX` and `scaleY` properties to `2f`, which means that the image will be zoomed in by 2 times.
+
+To evaluate how the GraphicsLayer API works, I built a simple example to show how scale and translation works. 
+
+<Video src="/sample-app-graphics-layer.mp4" />
+
+
+First, we use the `Modifier.graphicsLayer` modifier to set the `scaleX` and `scaleY` properties using values from a `Slider`. Similarly, we use a `Slider` to set the `translationX` and `translationY` properties.
+
+```kotlin
+class ZoomableState(
+    initialScale: Float = 1f,
+    val minScale: Float = 1f,
+    val maxScale: Float = 5f
+) {
+     var offset by mutableStateOf(Offset.Zero)
+        internal set
+    ... // rest of the implementation.
+}
+
+@Composable
+private fun GalleryImage(zoomableState: ZoomableState, modifier: Modifier = Modifier) {
+    val id = R.drawable.happy_dog
+    Surface(modifier = modifier.fillMaxSize()) {
+        val context = LocalContext.current
+        val model = remember(id) {
+            ImageRequest.Builder(context).data(id).build()
+        }
+
+        AsyncImage(
+            model = model,
+            contentDescription = null,
+            modifier = Modifier.graphicsLayer {
+                scaleX = zoomableState.scale
+                scaleY = zoomableState.scale
+                translationX = zoomableState.offset.x
+                translationY = zoomableState.offset.y
+            },
+            contentScale = ContentScale.Fit,
+        )
+    }
+}
+```
+
+We can apply zoom effects using the `Modifier.graphicsLayer` modifier and `scaleX` and `scaleY` properties. To apply panning effects, use `translationX` and `translationY`. Modifying these properties moves the image around the screen. We want to achieve the same effect with a gesture.
+
+Now that we have the tools to apply the effects to the images, we now focus on detecting the user gestures. 
+
+## Detecting the user gestures
+
+Let us try to understand some concepts before we start implementing the gesture detection:
+
+- **Pointer**: is the object that represents the user's touch, stylus, or mouse input.
+- **Pointer event**: is the event that is triggered when one or more pointers interact with the application.
+- **Gesture**: is a sequence of pointer events that are detected by the system and can be interpreted as a single action.
+
+Compose offers various modifiers for different gesture types: `clickable`, `combinedClickable`, `selectable`, `toggleable`, and `triStateToggleable` for taps and presses; `horizontalScroll`, `verticalScroll`, and `scrollable` for scrolling; `draggable` and `swipeable` for dragging; and `transformable` for multi-touch gestures like panning, rotating, and zooming.. However, if we want to detect more complex gestures, we can use the `Modifier.pointerInput` modifier. This modifier allows us to detect the user gestures and apply the effects to the image.
+
+
+### `pointerInput` modifier
+
+We are going to use the `Modifier.pointerInput` modifier to detect the user gestures starting from two-finger zoom gestures. Let us try to understand how this modifier works. First, we need to understand how the `pointerInput` modifier is defined:
+
+```kotlin
+fun Modifier.pointerInput(key1: Any?, block: suspend PointerInputScope.() -> Unit): Modifier
+```
+
+or with two keys:
+
+```kotlin
+fun Modifier.pointerInput(key1: Any?, key2: Any?, block: suspend PointerInputScope.() -> Unit): Modifier
+```
+
+Notice that the `block` parameter is a suspend function is of type `PointerInputScope`. This scope provides a set of functions (some of them extension functions) to detect the user gestures. 
+
+Here are the primary gesture detection extension functions available for PointerInputScope:
+1. Tap and Press Gestures 
+
+    `detectTapGestures(...)`: Detects single taps, double taps, long presses, and press events.
+        Parameters: onDoubleTap, onLongPress, onPress, onTap.
+    `detectTapAndPress(...)`: A variant, sometimes used in lower-level implementations to handle press and tap separation. 
+
+2. Drag and Swipe Gestures
+
+    `detectDragGestures(...)`: Detects drag gestures, providing callbacks for start, end, cancellation, and movement.
+    `detectHorizontalDragGestures(...)`: Specifically detects horizontal drag movement.
+    `detectVerticalDragGestures(...)`: Specifically detects vertical drag movement.
+    `detectDragGesturesAfterLongPress(...)`: Initiates dragging only after a long press is detected. 
+
+3. Multi-touch (Transform) Gestures 
+
+    `detectTransformGestures(...)`: Detects multi-touch gestures such as panning, zooming, and rotating. It provides the centroid, pan, zoom, and rotation values. 
+
+4. Other/Custom
+
+    `awaitEachGesture(...)`: A lower-level helper function often used to wrap other gesture detectors to ensure they restart properly after a gesture is completed. 
+
+#### `awaitEachGesture` function
+
+One of the cool things we’re going to do is use the `awaitEachGesture` extension function. It lets us spot what the user is doing with their hands and then make the image react to it! Here’s how it’s set up:
+
+```kotlin
+suspend fun PointerInputScope.awaitEachGesture(block: suspend AwaitPointerEventScope.() -> Unit): Unit
+```
+
+The `awaitEachGesture` function takes a block as a parameter that is executed when the user interacts with the application. The block is a suspend function that takes a `AwaitPointerEventScope` as a parameter. The important method that is part of  `AwaitPointerEventScope` is `awaitPointerEvent`:
+
+```kotlin
+suspend fun awaitPointerEvent(pass: PointerEventPass = PointerEventPass.Main): PointerEvent
+```
+
+This method waits for a pointer event to occur and returns a `PointerEvent` object. The `PointerEvent` object provides information about the user's gesture such as the type of gesture, the position of the pointer, the time of the gesture, and the state of the gesture.
+
+We start the definition of the `Modifier.zoomable` modifier as follows:
+
+```kotlin
+@Composable
+fun Modifier.zoomable(
+    state: ZoomableState,
+    modifier: Modifier = Modifier,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    return this
+        .pointerInput(state.minScale, state.maxScale) {
+            awaitEachGesture {
+                // Wait for the initial touch.
+                awaitFirstDown(requireUnconsumed = false)
+        
+                do {
+                    // Wait for the next event.
+                    val event = awaitPointerEvent()
+
+                  // Keep processing events as long as at least one finger is down.   
+                } while (event.changes.any { it.pressed }) 
+            }
+        }
+}
+```
+
+Here is a video of when these events are executed: 
+
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+  <img src="/touch-events-setup.GIF" alt="Touch events setup demonstration" width="400" style={{ display: 'block' }} />
+</div>
+

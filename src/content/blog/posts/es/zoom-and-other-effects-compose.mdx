@@ -1,0 +1,90 @@
+---
+slug: zoom-and-other-effects-compose
+title: Zoom and other effects in Compose
+summary: In this article, we will explore the effects such as pinch zoom and panning in Compose.
+category: mobile
+coverImage: /software-quality-mobile-header.svg
+author: Danilo Dominguez
+date: 2026-01-23
+readTime: 10 min read
+tags:
+  - Quality
+  - Mobile
+  - Testing
+  - Static analysis
+  - Security
+  - CI/CD
+  - QA
+published: true
+---
+
+In this article, we will explore the implement of effects of pinch zoom in Compose and try to understand the different APIs that we can use to achieve this. Some of the effects that we will explore are:
+- Pinch zoom: is a common gesture in mobile applications. It is used to zoom in and out of a view. 
+- Panning: is a common gesture in mobile applications. It is used to move a view around.
+
+## The GraphicsLayer API
+
+Le us introduce one component that we will use to apply the effects: the **GraphicsLayer**. GraphicsLayer is a drawing layer that records drawing commands into a display list and stores rendering properties. It isolates parts of a scene so they can be updated independently without rebuilding the whole scene. Transformations can be applied without re-recording the display list.
+
+
+When drawing the display list into a destination Canvas, you can apply transformations by setting `scaleX`, `scaleY`, `translationX`, `translationY`, `rotationX`, `rotationY`, or `rotationZ`.
+
+Imagine we have an Imagen that we want to apply a zoom effect to. We can control the zoom effect by setting the `scaleX` and `scaleY` properties.
+```kotlin
+Image(
+    ... // other properties
+    modifier = Modifier.graphicsLayer {
+        scaleX = 2f
+        scaleY = 2f
+    }
+)
+```
+
+In this example, we are setting the `scaleX` and `scaleY` properties to `2f`, which means that the image will be zoomed in by 2 times.
+
+To evaluate how the GraphicsLayer API works, I built a simple example to show how scale and translation works. 
+
+<Video src="/sample-app-graphics-layer.mp4" />
+
+
+First, we use the `Modifier.graphicsLayer` modifier to set the `scaleX` and `scaleY` properties using values from a `Slider`. Similarly, we use a `Slider` to set the `translationX` and `translationY` properties.
+
+```kotlin
+class ZoomableState(
+    initialScale: Float = 1f,
+    val minScale: Float = 1f,
+    val maxScale: Float = 5f
+) {
+     var offset by mutableStateOf(Offset.Zero)
+        internal set
+    ... // rest of the implementation.
+}
+
+@Composable
+private fun GalleryImage(zoomableState: ZoomableState, modifier: Modifier = Modifier) {
+    val id = R.drawable.happy_dog
+    Surface(modifier = modifier.fillMaxSize()) {
+        val context = LocalContext.current
+        val model = remember(id) {
+            ImageRequest.Builder(context).data(id).build()
+        }
+
+        AsyncImage(
+            model = model,
+            contentDescription = null,
+            modifier = Modifier.graphicsLayer {
+                scaleX = zoomableState.scale
+                scaleY = zoomableState.scale
+                translationX = zoomableState.offset.x
+                translationY = zoomableState.offset.y
+            },
+            contentScale = ContentScale.Fit,
+        )
+    }
+}
+```
+
+Now that we have the tools to apply the effects to the images, we now focus on detecting the user gestures. 
+
+## Detecting the user gestures
+

@@ -91,6 +91,55 @@ const components = {
               : '';
         return <Mermaid chart={chart} />;
       }
+      
+      // Extract raw text content to count lines (for line numbers)
+      // This preserves syntax highlighting in the original code element
+      const codeContent = (child.props as { children?: React.ReactNode }).children;
+      const extractText = (node: React.ReactNode): string => {
+        if (typeof node === 'string') return node;
+        if (typeof node === 'number') return String(node);
+        if (Array.isArray(node)) return node.map(extractText).join('');
+        if (React.isValidElement(node) && node.props.children) {
+          return extractText(node.props.children);
+        }
+        return '';
+      };
+      
+      const codeString = extractText(codeContent);
+      // Remove trailing newlines to avoid extra blank line at the bottom
+      const trimmedCode = codeString.replace(/\n+$/, '');
+      const lines = trimmedCode.split('\n');
+      const lineCount = lines.length;
+      
+      return (
+        <pre 
+          className="my-6 rounded-xl overflow-x-auto bg-slate-900 dark:bg-slate-950 shadow-lg" 
+          {...props}
+        >
+          <div className="flex min-h-0">
+            {/* Line numbers */}
+            <div 
+              className="shrink-0 px-4 py-4 md:py-6 text-slate-500 dark:text-slate-400 text-sm md:text-base font-mono select-none border-r border-slate-700 dark:border-slate-800 text-right"
+              style={{ lineHeight: '1.75' }}
+            >
+              {Array.from({ length: lineCount }, (_, index) => (
+                <div key={index} style={{ minHeight: '1.75rem' }}>
+                  {index + 1}
+                </div>
+              ))}
+            </div>
+            {/* Code content with syntax highlighting preserved */}
+            <div className="flex-1 overflow-x-auto min-w-0">
+              <code 
+                className={`${className} block text-sm md:text-base text-slate-100 font-mono p-4 md:p-6`}
+                style={{ lineHeight: '1.75', whiteSpace: 'pre' }}
+              >
+                {child.props.children}
+              </code>
+            </div>
+          </div>
+        </pre>
+      );
     }
 
     return (
@@ -140,6 +189,42 @@ const components = {
   img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <img className="my-6 rounded-xl max-w-full h-auto" {...props} />
   ),
+  
+  // Video
+  video: (props: React.VideoHTMLAttributes<HTMLVideoElement>) => {
+    const { src, ...rest } = props;
+    return (
+      <video 
+        className="my-6 rounded-xl w-full shadow-lg" 
+        controls 
+        muted 
+        loop 
+        autoPlay 
+        playsInline 
+        {...rest}
+      >
+        {src && <source src={src} type="video/mp4" />}
+        Your browser does not support the video tag.
+      </video>
+    );
+  },
+  Video: (props: React.VideoHTMLAttributes<HTMLVideoElement>) => {
+    const { src, ...rest } = props;
+    return (
+      <video 
+        className="my-6 rounded-xl w-full shadow-lg" 
+        controls 
+        muted 
+        loop 
+        autoPlay 
+        playsInline 
+        {...rest}
+      >
+        {src && <source src={src} type="video/mp4" />}
+        Your browser does not support the video tag.
+      </video>
+    );
+  },
 };
 
 interface MDXProviderProps {

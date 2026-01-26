@@ -7,6 +7,9 @@ import ReactiveAndroidKotlinFlowsEn, {
 import SoftwareQualityMobileAppsEn, { 
   frontmatter as softwareQualityMobileAppsEnFrontmatter 
 } from './posts/en/software-quality-mobile-apps.mdx';
+import ZoomAndOtherEffectsComposeEn, { 
+  frontmatter as zoomAndOtherEffectsComposeEnFrontmatter 
+} from './posts/en/zoom-and-other-effects-compose.mdx';
 
 // Import Spanish MDX posts
 import ReactiveAndroidKotlinFlowsEs, { 
@@ -15,6 +18,9 @@ import ReactiveAndroidKotlinFlowsEs, {
 import SoftwareQualityMobileAppsEs, { 
   frontmatter as softwareQualityMobileAppsEsFrontmatter 
 } from './posts/es/software-quality-mobile-apps.mdx';
+import ZoomAndOtherEffectsComposeEs, { 
+  frontmatter as zoomAndOtherEffectsComposeEsFrontmatter 
+} from './posts/es/zoom-and-other-effects-compose.mdx';
 
 // All blog posts organized by slug with both languages
 const blogPostsMap: Record<string, LocalizedBlogPost> = {
@@ -36,6 +42,16 @@ const blogPostsMap: Record<string, LocalizedBlogPost> = {
     es: {
       frontmatter: softwareQualityMobileAppsEsFrontmatter as unknown as BlogPostFrontmatter,
       Content: SoftwareQualityMobileAppsEs,
+    },
+  },
+  'zoom-and-other-effects-compose': {
+    en: {
+      frontmatter: zoomAndOtherEffectsComposeEnFrontmatter as unknown as BlogPostFrontmatter,
+      Content: ZoomAndOtherEffectsComposeEn,
+    },
+    es: {
+      frontmatter: zoomAndOtherEffectsComposeEsFrontmatter as unknown as BlogPostFrontmatter,
+      Content: ZoomAndOtherEffectsComposeEs,
     },
   },
 };
