@@ -96,7 +96,16 @@ Let us try to understand some concepts before we start implementing the gesture 
 - **Pointer event**: is the event that is triggered when one or more pointers interact with the application.
 - **Gesture**: is a sequence of pointer events that are detected by the system and can be interpreted as a single action.
 
-Compose offers various modifiers for different gesture types: `clickable`, `combinedClickable`, `selectable`, `toggleable`, and `triStateToggleable` for taps and presses; `horizontalScroll`, `verticalScroll`, and `scrollable` for scrolling; `draggable` and `swipeable` for dragging; and `transformable` for multi-touch gestures like panning, rotating, and zooming.. However, if we want to detect more complex gestures, we can use the `Modifier.pointerInput` modifier. This modifier allows us to detect the user gestures and apply the effects to the image.
+Compose offers various modifiers for different gesture types:
+
+| Gesture Type | Modifiers |
+|--------------|-----------|
+| Taps and Presses | `clickable`, `combinedClickable`, `selectable`, `toggleable`, `triStateToggleable` |
+| Scrolling | `horizontalScroll`, `verticalScroll`, `scrollable` |
+| Dragging | `draggable`, `swipeable` |
+| Multi-touch (Panning, Rotating, Zooming) | `transformable` |
+
+However, if we want to detect more complex gestures, we can use the `Modifier.pointerInput` modifier. This modifier allows us to detect the user gestures and apply the effects to the image.
 
 
 ### `pointerInput` modifier
@@ -116,26 +125,143 @@ fun Modifier.pointerInput(key1: Any?, key2: Any?, block: suspend PointerInputSco
 Notice that the `block` parameter is a suspend function is of type `PointerInputScope`. This scope provides a set of functions (some of them extension functions) to detect the user gestures. 
 
 Here are the primary gesture detection extension functions available for PointerInputScope:
-1. Tap and Press Gestures 
 
-    `detectTapGestures(...)`: Detects single taps, double taps, long presses, and press events.
-        Parameters: onDoubleTap, onLongPress, onPress, onTap.
-    `detectTapAndPress(...)`: A variant, sometimes used in lower-level implementations to handle press and tap separation. 
+| Category | Function | Description |
+|----------|----------|-------------|
+| **Tap and Press Gestures** | `detectTapGestures(...)` | Detects single taps, double taps, long presses, and press events. Parameters: `onDoubleTap`, `onLongPress`, `onPress`, `onTap`. |
+| | `detectTapAndPress(...)` | A variant, sometimes used in lower-level implementations to handle press and tap separation. |
+| **Drag and Swipe Gestures** | `detectDragGestures(...)` | Detects drag gestures, providing callbacks for start, end, cancellation, and movement. |
+| | `detectHorizontalDragGestures(...)` | Specifically detects horizontal drag movement. |
+| | `detectVerticalDragGestures(...)` | Specifically detects vertical drag movement. |
+| | `detectDragGesturesAfterLongPress(...)` | Initiates dragging only after a long press is detected. |
+| **Multi-touch (Transform) Gestures** | `detectTransformGestures(...)` | Detects multi-touch gestures such as panning, zooming, and rotating. It provides the centroid, pan, zoom, and rotation values. |
+| **Other/Custom** | `awaitEachGesture(...)` | A lower-level helper function often used to wrap other gesture detectors to ensure they restart properly after a gesture is completed. | 
 
-2. Drag and Swipe Gestures
 
-    `detectDragGestures(...)`: Detects drag gestures, providing callbacks for start, end, cancellation, and movement.
-    `detectHorizontalDragGestures(...)`: Specifically detects horizontal drag movement.
-    `detectVerticalDragGestures(...)`: Specifically detects vertical drag movement.
-    `detectDragGesturesAfterLongPress(...)`: Initiates dragging only after a long press is detected. 
+There are two ways to detect the zoom gesture with two fingers. We can use the `awaitEachGesture` function or the `detectTransformGestures` function. We are going to implement both approaches.
 
-3. Multi-touch (Transform) Gestures 
+#### `detectTransformGestures` function
 
-    `detectTransformGestures(...)`: Detects multi-touch gestures such as panning, zooming, and rotating. It provides the centroid, pan, zoom, and rotation values. 
+The function `detectTransformGestures` is defined as follows:
+```kotlin
+suspend fun PointerInputScope.detectTransformGestures(
+    panZoomLock: Boolean = false,
+    onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Unit
+)
+```
 
-4. Other/Custom
+The function takes two parameters:
+- `panZoomLock`:  if it is true, rotation is allowed only if touch slop is detected for rotation before pan or zoom motions. If not, pan and zoom gestures will be detected, but rotation gestures will not be. If panZoomLock is false, once touch slop is reached, all three gestures are detected.
+- `onGesture`: a callback function that is called when the user performs a transform gesture. This callback provides with enough information to apply the zoom and panning effects to the image.
 
-    `awaitEachGesture(...)`: A lower-level helper function often used to wrap other gesture detectors to ensure they restart properly after a gesture is completed. 
+We start by implementing the `detectTransformGestures` function in the `Modifier.zoomable` modifier.
+
+```kotlin
+@Composable
+fun Modifier.zoomable(
+    state: ZoomableState,
+    modifier: Modifier = Modifier,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    return this
+        .pointerInput(state.minScale, state.maxScale) {
+            detectTransformGestures(
+                onGesture = { centroid, pan, gestureZoom, gestureRotate ->
+
+                }
+            )
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+With this information (centroid, pan, and gestureZoom), we are ready to compute the scale and offset values to apply them to `scaleX`, `scaleY`, `translationX`, and `translationY` properties of the `graphicsLayer` modifier. To compute the scale value, we need to compute the distance between the two fingers and divide it by the initial distance between the two fingers.
+
+Let us define a method to compute the scale value:
+```kotlin
+fun computeScale(gestureZoom: Float): Float {
+    return (scale * gestureZoom).coerceIn(state.minScale, state.maxScale)
+}
+```
+
+We compute the scale value by multiplying the current scale by the gestureZoom and coercing the result between the minimum and maximum scale values.
+
+To compute the offset value, we just add the pan value to the current offset.
+```kotlin
+fun computeOffset(pan: Offset): Offset {
+    return offset + pan
+}
+```
+
+Let us update the `detectTransformGestures` function to use the `computeScale` and `computeOffset` methods:
+
+```kotlin
+@Composable
+fun Modifier.zoomableTransformGesture(
+    zoomableState: ZoomableState,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    fun computeScale(gestureZoom: Float): Float {
+        return (scale * gestureZoom).coerceIn(zoomableState.minScale, zoomableState.maxScale)
+    }
+
+    fun computeOffset(pan: Offset): Offset {
+        return offset + pan
+    }
+
+    return this
+        .pointerInput(zoomableState.minScale, zoomableState.maxScale) {
+            detectTransformGestures(
+                onGesture = { _, pan, gestureZoom, _ ->
+                    scale = computeScale(gestureZoom)
+                    offset = computeOffset(pan)
+                    onZoomChange?.invoke(scale)
+                }
+            )
+        }.graphicsLayer {
+            translationX = offset.x
+            translationY = offset.y
+            scaleX = scale
+            scaleY = scale
+        }
+}
+```
+
+This implementation still has some issues. When performing a panning gesture, we move outside the image. We need to limit the panning gesture to the image boundaries. To do this, we need to compute the maximum offset value based on the image size and the current scale value. To get the image size, we use `Modifier.onSizeChange` modifier to get the size of the image. 
+
+```kotlin
+var containerSize by remember { mutableStateOf(IntSize.Zero) }
+
+    return this
+        .onSizeChanged { containerSize = it }
+```
+
+We can use the `containerSize` to compute the maximum offset value.
+```kotlin
+fun computeOffset(pan: Offset): Offset {
+    val maxOffsetX = (scale - 1f) * containerSize.width / 2f
+    val maxOffsetY = (scale - 1f) * containerSize.height / 2f
+
+    // Multiply the scale so it panning gesture move at the same speed at any zoom level.
+    val newOffset = offset + pan * scale 
+    return Offset(
+        newOffset.x.coerceIn(-maxOffsetX, maxOffsetX),
+        newOffset.y.coerceIn(-maxOffsetY, maxOffsetY)
+    )
+}
+```
+
+Let us update the `computeOffset` method to use the `computeMaxOffset` method.
 
 #### `awaitEachGesture` function
 
@@ -145,13 +271,7 @@ One of the cool things we’re going to do is use the `awaitEachGesture` extensi
 suspend fun PointerInputScope.awaitEachGesture(block: suspend AwaitPointerEventScope.() -> Unit): Unit
 ```
 
-The `awaitEachGesture` function takes a block as a parameter that is executed when the user interacts with the application. The block is a suspend function that takes a `AwaitPointerEventScope` as a parameter. The important method that is part of  `AwaitPointerEventScope` is `awaitPointerEvent`:
-
-```kotlin
-suspend fun awaitPointerEvent(pass: PointerEventPass = PointerEventPass.Main): PointerEvent
-```
-
-This method waits for a pointer event to occur and returns a `PointerEvent` object. The `PointerEvent` object provides information about the user's gesture such as the type of gesture, the position of the pointer, the time of the gesture, and the state of the gesture.
+The `awaitEachGesture` function takes a block as a parameter that is executed when the user interacts with the application. The block is a suspend function that takes a `AwaitPointerEventScope` as a parameter. 
 
 We start the definition of the `Modifier.zoomable` modifier as follows:
 
@@ -162,6 +282,9 @@ fun Modifier.zoomable(
     modifier: Modifier = Modifier,
     onZoomChange: ((Float) -> Unit)? = null
 ): Modifier {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+    
     return this
         .pointerInput(state.minScale, state.maxScale) {
             awaitEachGesture {
@@ -175,6 +298,11 @@ fun Modifier.zoomable(
                   // Keep processing events as long as at least one finger is down.   
                 } while (event.changes.any { it.pressed }) 
             }
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
         }
 }
 ```
@@ -184,4 +312,17 @@ Here is a video of when these events are executed:
 <div style={{ display: 'flex', justifyContent: 'center' }}>
   <img src="/touch-events-setup.GIF" alt="Touch events setup demonstration" width="400" style={{ display: 'block' }} />
 </div>
+
+<div style={{ paddingBottom: '2rem' }} />
+
+
+Let us study the code step by step. First, we start by defining the `Modifier.zoomable` modifier. This modifier is a modifier that applies the zoom effect to the image. It takes a `ZoomableState` as a parameter and a `Modifier` as a parameter. The `ZoomableState` is a state object that contains the current zoom level and the minimum and maximum zoom levels. The `Modifier` is the modifier that is applied to the image.
+
+Inside `pointerInput` modifier, we start by awaiting the initial touch. At line `11`, we use the `awaitFirstDown` function to wait for the initial touch. It doesn't block the main thread and sleeps until the user touches the screen. We don't care if the event was already consumed by another component, thus we set `requireUnconsumed` to `false`. 
+
+Once the user touches the image, we enter the `do` loop to listen for the next events. These events are processed until the user releases the touch. We use the `awaitPointerEvent` function to wait for the next event. This function returns a `PointerEvent` object. We then process the event in the `do` loop.
+
+To detect when the user releases the touch, we execute the `do` loop while at least one finger is down. A `PointerEvent` object has a `changes` property that contains a list of `PointerChange` objects. Each `PointerChange` object represents a change in the pointer state. For example, if the user touches the screen with two fingers, the `changes` property will contain two `PointerChange` objects. One for each finger. We check that with the `any { it.pressed }` expression which verifies if at least one finger is down.
+
+### Detecting the zoom and panning gestures
 
