@@ -13,6 +13,12 @@
 	"observability": {
 		"enabled": true
 	},
+	"r2_buckets": [
+		{
+			"binding": "ASSETS_BUCKET",
+			"bucket_name": "danilo04-assets"
+		}
+	],
 	"d1_databases": [
 		{
 			"binding": "DB",

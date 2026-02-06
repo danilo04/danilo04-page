@@ -44,7 +44,7 @@ In this example, we are setting the `scaleX` and `scaleY` properties to `2f`, wh
 
 To evaluate how the GraphicsLayer API works, I built a simple example to show how scale and translation works. 
 
-<Video src="/sample-app-graphics-layer.mp4" />
+<Video src="/media/sample-app-graphics-layer.mp4" />
 
 
 First, we use the `Modifier.graphicsLayer` modifier to set the `scaleX` and `scaleY` properties using values from a `Slider`. Similarly, we use a `Slider` to set the `translationX` and `translationY` properties.
@@ -239,7 +239,8 @@ fun Modifier.zoomableTransformGesture(
 
 This implementation still has some issues. When performing a panning gesture, we move outside the image. See video below:
 
-![Setting up touch events in Compose](/touch-events-setup.GIF)
+<Video src="/panning-outside.mp4" />
+
 
 We need to limit the panning gesture to the image boundaries. To do this, we need to compute the maximum offset value based on the image size and the current scale value. To get the image size, we use `Modifier.onSizeChange` modifier to get the size of the image. 
 
@@ -383,7 +384,7 @@ fun Modifier.zoomableAwaitEachGesture(
 Here is a video of when these events are executed: 
 
 <div style={{ display: 'flex', justifyContent: 'center' }}>
-  <img src="/touch-events-setup.GIF" alt="Touch events setup demonstration" width="400" style={{ display: 'block' }} />
+  <img src="/media/touch-events-setup.GIF" alt="Touch events setup demonstration" width="400" style={{ display: 'block' }} />
 </div>
 
 <div style={{ paddingBottom: '2rem' }} />

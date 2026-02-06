@@ -44,7 +44,7 @@ En este ejemplo, estamos configurando las propiedades `scaleX` y `scaleY` a `2f`
 
 Para evaluar cómo funciona la API GraphicsLayer, construí un ejemplo simple para mostrar cómo funcionan la escala y la translación.
 
-<Video src="/sample-app-graphics-layer.mp4" />
+<Video src="/media/sample-app-graphics-layer.mp4" />
 
 
 Primero, usamos el modificador `Modifier.graphicsLayer` para configurar las propiedades `scaleX` y `scaleY` usando valores de un `Slider`. De manera similar, usamos un `Slider` para configurar las propiedades `translationX` y `translationY`.
@@ -239,7 +239,7 @@ fun Modifier.zoomableTransformGesture(
 
 Esta implementación todavía tiene algunos problemas. Al realizar un gesto de desplazamiento, nos movemos fuera de la imagen. Mira el video a continuación:
 
-![Configurando eventos táctiles en Compose](/touch-events-setup.GIF)
+<Video src="/panning-outside.mp4" />
 
 Necesitamos limitar el gesto de desplazamiento a los límites de la imagen. Para hacer esto, necesitamos calcular el valor máximo de desplazamiento basado en el tamaño de la imagen y el valor de escala actual. Para obtener el tamaño de la imagen, usamos el modificador `Modifier.onSizeChange` para obtener el tamaño de la imagen.
 
@@ -383,7 +383,7 @@ fun Modifier.zoomableAwaitEachGesture(
 Aquí hay un video de cuándo se ejecutan estos eventos:
 
 <div style={{ display: 'flex', justifyContent: 'center' }}>
-  <img src="/touch-events-setup.GIF" alt="Demostración de configuración de eventos táctiles" width="400" style={{ display: 'block' }} />
+  <img src="/media/touch-events-setup.GIF" alt="Demostración de configuración de eventos táctiles" width="400" style={{ display: 'block' }} />
 </div>
 
 <div style={{ paddingBottom: '2rem' }} />

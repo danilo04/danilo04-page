@@ -1,11 +1,52 @@
 interface Env {
   DB: D1Database;
+  ASSETS_BUCKET: R2Bucket;
 }
+
+// Map of public URL paths to R2 object keys
+const R2_MEDIA_FILES: Record<string, string> = {
+  "/media/sample-app-graphics-layer.mp4": "sample-app-graphics-layer.mp4",
+  "/media/touch-events-setup.GIF": "touch-events-setup.GIF",
+};
+
+const CONTENT_TYPES: Record<string, string> = {
+  ".mp4": "video/mp4",
+  ".gif": "image/gif",
+  ".GIF": "image/gif",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml",
+};
 
 export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url);
     const pathParts = url.pathname.split("/");
+
+    // Serve media files from R2
+    if (url.pathname.startsWith("/media/")) {
+      const objectKey = R2_MEDIA_FILES[url.pathname];
+      if (!objectKey) {
+        return new Response("Not Found", { status: 404 });
+      }
+
+      const object = await env.ASSETS_BUCKET.get(objectKey);
+      if (!object) {
+        return new Response("Not Found", { status: 404 });
+      }
+
+      const ext = objectKey.substring(objectKey.lastIndexOf("."));
+      const contentType = CONTENT_TYPES[ext] || "application/octet-stream";
+
+      const headers = new Headers();
+      headers.set("Content-Type", contentType);
+      headers.set("Cache-Control", "public, max-age=31536000, immutable");
+      headers.set("ETag", object.httpEtag);
+
+      return new Response(object.body, { headers });
+    }
 
     // API Routes: /api/posts/:slug/...
     if (url.pathname.startsWith("/api/posts/")) {
