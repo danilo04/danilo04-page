@@ -237,7 +237,11 @@ fun Modifier.zoomableTransformGesture(
 }
 ```
 
-This implementation still has some issues. When performing a panning gesture, we move outside the image. We need to limit the panning gesture to the image boundaries. To do this, we need to compute the maximum offset value based on the image size and the current scale value. To get the image size, we use `Modifier.onSizeChange` modifier to get the size of the image. 
+This implementation still has some issues. When performing a panning gesture, we move outside the image. See video below:
+
+![Setting up touch events in Compose](/touch-events-setup.GIF)
+
+We need to limit the panning gesture to the image boundaries. To do this, we need to compute the maximum offset value based on the image size and the current scale value. To get the image size, we use `Modifier.onSizeChange` modifier to get the size of the image. 
 
 ```kotlin
 var containerSize by remember { mutableStateOf(IntSize.Zero) }
@@ -261,11 +265,80 @@ fun computeOffset(pan: Offset): Offset {
 }
 ```
 
-Let us update the `computeOffset` method to use the `computeMaxOffset` method.
+Now, we limit the panning gesture to the image boundaries for width. For height, we still can pan outside the image into the [letter-box](https://en.wikipedia.org/wiki/Letterbox_(filming)). To avoid panning outside the image, we need to compute the maximum offset value based on the image size and the current scale value. We also need the size of the image. We are going to use the `onSuccess` callback in the `AsyncImage` to get the size of the image. 
+
+```kotlin
+var imageSize by remember { mutableStateOf(IntSize.Zero) }
+
+AsyncImage(
+    model = model,
+    contentDescription = null,
+    modifier = Modifier,
+    contentScale = ContentScale.Fit,
+    onSuccess = { result ->
+        val drawable = result.result.drawable
+        imageSize = IntSize(drawable.intrinsicWidth, drawable.intrinsicHeight)
+    }
+)
+```
+
+With the container size and the image size, we can compute the maximum offset value for width and height. 
+
+[Image size versus container size](/zoom-image-size.png)
+
+```kotlin
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+    var containerSize by remember { mutableStateOf(IntSize.Zero) }
+
+    fun computeScale(gestureZoom: Float): Float {
+        return (scale * gestureZoom).coerceIn(zoomableState.minScale, zoomableState.maxScale)
+    }
+
+    val w = containerSize.width.toFloat()
+    val h = containerSize.height.toFloat()
+    val iw = imageIntrinsicSize.width.toFloat()
+    val ih = imageIntrinsicSize.height.toFloat()
+
+    val fittedHeight = w * (ih / iw)
+
+    val coverScaleY = h / fittedHeight 
+
+    fun computeOffsetY(panY: Float): Float {
+        // Before the image covers top+bottom, don't allow vertical pan
+        if (scale <= coverScaleY) return 0f
+
+        // Once it covers, allow pan but clamp to keep only image visible
+        val maxOffsetY = (fittedHeight * scale - h) / 2f
+        val newY = offset.y + panY
+        return newY.coerceIn(-maxOffsetY, maxOffsetY)
+    }
+
+    fun computeOffset(pan: Offset): Offset {
+        val maxOffsetX = (scale - 1f) * containerSize.width / 2f
+    
+
+        val newOffset = offset + pan * scale
+        return Offset(
+            newOffset.x.coerceIn(-maxOffsetX, maxOffsetX),
+            computeOffsetY(pan.y)
+        )
+    }
+```
+
+Let me try to explain the code step by step:
+
+- **`ContentScale.Fit`**: notice that we are using the `ContentScale.Fit` to fit the image to the container. This is important because it allows us to compute the maximum offset value for width and height.
+- **`fittedHeight`** — Image height when its width fits the container: `w * (ih/iw)`. 
+- **`coverScaleY`** — When you zoom with scale `s`, the image will cover the container height when `s >= coverScaleY`. We can use this value to check if we can pan vertically because the scale has covered the letter-box.
+- **`computeOffsetY`** — Returns 0 when `scale <= coverScaleY` to avoid panning outside the image; otherwise clamps the vertical offset to `±(fittedHeight * scale - h) / 2` so only image is visible.
+
+If the screen is in landscape mode, the image will be wider than the container. We need to apply similar logic to the width to avoid panning outside the image.
+
 
 #### `awaitEachGesture` function
 
-One of the cool things we’re going to do is use the `awaitEachGesture` extension function. It lets us spot what the user is doing with their hands and then make the image react to it! Here’s how it’s set up:
+Another approach to detect the zoom and panning gestures is to use the `awaitEachGesture` function. This function allows us to detect the user gestures and apply the effects to the image.
 
 ```kotlin
 suspend fun PointerInputScope.awaitEachGesture(block: suspend AwaitPointerEventScope.() -> Unit): Unit
@@ -276,16 +349,16 @@ The `awaitEachGesture` function takes a block as a parameter that is executed wh
 We start the definition of the `Modifier.zoomable` modifier as follows:
 
 ```kotlin
-@Composable
-fun Modifier.zoomable(
-    state: ZoomableState,
-    modifier: Modifier = Modifier,
+@Composable 
+fun Modifier.zoomableAwaitEachGesture(
+    zoomableState: ZoomableState,
+    imageIntrinsicSize: IntSize,
     onZoomChange: ((Float) -> Unit)? = null
 ): Modifier {
-    var scale by remember { mutableFloatStateOf(1f) }
-    var offset by remember { mutableStateOf(Offset.Zero) }
+    ....
     
     return this
+        .onSizeChanged { containerSize = it }
         .pointerInput(state.minScale, state.maxScale) {
             awaitEachGesture {
                 // Wait for the initial touch.
@@ -326,3 +399,131 @@ To detect when the user releases the touch, we execute the `do` loop while at le
 
 ### Detecting the zoom and panning gestures
 
+First, we need to check the `PointerEventType` for the event. We need to check if the event is a `PointerEventType.Move`. Then, we check how many fingers are down. If there are two fingers, we can compute the zoom and pan values. If there is only one finger, we can compute the pan value.
+
+```kotlin
+@Composable 
+fun Modifier.zoomableAwaitEachGesture(
+    zoomableState: ZoomableState,
+    imageIntrinsicSize: IntSize,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    ....
+    
+    return this
+        .onSizeChanged { containerSize = it }
+        .pointerInput(state.minScale, state.maxScale) {
+            awaitEachGesture {
+                // Wait for the initial touch.
+                awaitFirstDown(requireUnconsumed = false)
+        
+                do {
+                    // Wait for the next event.
+                    val event = awaitPointerEvent()
+                    if (event.type == PointerEventType.Move) {
+                        if (pointerCount >= 2) {
+                            // Zoom gesture
+    
+                            onZoomChange?.invoke(scale)
+                        } else {
+                            // Pan gesture
+                            
+                        }
+                    }
+
+                  // Keep processing events as long as at least one finger is down.   
+                } while (event.changes.any { it.pressed }) 
+            }
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+
+Now, we need to compute the zoom and pan values. We can use the `computeScale` and `computeOffset` methods to compute the zoom and pan values. But first, we need to get the zoom and pan values from the event. For that we are going to use the exntesion functions `PointerEvent.calculateZoom()` and `PointerEvent.calculatePan()`.
+
+```kotlin
+@Composable 
+fun Modifier.zoomableAwaitEachGesture(
+    zoomableState: ZoomableState,
+    imageIntrinsicSize: IntSize,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    ....
+    
+    return this
+        .onSizeChanged { containerSize = it }
+        .pointerInput(state.minScale, state.maxScale) {
+            awaitEachGesture {
+                // Wait for the initial touch.
+                awaitFirstDown(requireUnconsumed = false)
+        
+                do {
+                    // Wait for the next event.
+                    val event = awaitPointerEvent()
+                    if (event.type == PointerEventType.Move) {
+                        if (pointerCount >= 2) {
+                            // Zoom gesture
+                            val gestureZoom = event.calculateZoom()
+                            val pan = event.calculatePan()
+
+                            scale = computeScale(gestureZoom)
+                            offset = computeOffset(pan)
+                            onZoomChange?.invoke(scale)
+
+                            // Consume the changes
+                            event.changes.forEach { change ->
+                                if (change.positionChanged()) {
+                                    change.consume()
+                                }
+                            }
+                        } else {
+                            // Pan gesture
+                            val pan = event.calculatePan()
+                            offset = computeOffset(pan)
+
+                            // Consume the changes
+                            event.changes.forEach { change ->
+                                if (change.positionChanged()) {
+                                    change.consume()
+                                }
+                            }
+                        }
+                    }
+
+                  // Keep processing events as long as at least one finger is down.   
+                } while (event.changes.any { it.pressed }) 
+            }
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+Notice the we are "consuming" the changes. This is important because it allows us to prevent the event from being processed by other components. If we don't consume the changes, the event will be processed by other components and the image might not be updated correctly. Let me explain each of the functions:
+
+- `change.positionChanged()`: true if that pointer’s position changed in this event (e.g. the finger moved).
+- `change.consume()`: Marks that pointer’s change as consumed by this modifier.
+
+**Why consume?**
+
+In Compose’s input system, consuming a change means: “this modifier has handled this pointer input.” Effects:
+- **Stops other handlers from using the same movement**: So a parent (e.g. a vertical Scrollable or pager) or another gesture detector won’t also react to the same drag. Without consuming, both the zoomable image and the parent could move, which feels wrong.  
+- **Makes it clear the gesture was “used”**: The system can treat the event as handled and not apply default behavior (e.g. scroll) to it.
+
+So in practice: “We’ve applied this move to our zoom/pan; mark these pointer movements as consumed so nothing else (like a parent scroll) reacts to them.
+
+## Conclusion
+
+In this article, we have seen two approaches to detect the zoom and panning gestures in Compose. The first approach is to use the `detectTransformGestures` function. This function allows us to detect the zoom and panning gestures and apply the effects to the image. The second approach is to use the `awaitEachGesture` function. This function allows us to detect the user gestures and apply the effects to the image.
+
+We have also seen how to compute the zoom and pan values from the event. We have also seen how to consume the changes to prevent the event from being processed by other components. This is important not just for effects but also for handling other gestures like scroll or implementing other effects.
+
+I hope you enjoyed this article. If you have any questions, please feel free to ask me.
