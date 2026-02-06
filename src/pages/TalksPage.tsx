@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslations } from '../hooks/useTranslations';
+import { useHead } from '../hooks/useHead';
+import { useLanguage } from '../components/language-provider';
 
 // Import talk thumbnails
 import flisol2025Thumbnail from '../assets/talks/flisol-2025-tools-mobile-dev.png';
@@ -31,7 +33,17 @@ interface Talk {
 
 const TalksPage: React.FC = () => {
   const t = useTranslations();
+  const { language } = useLanguage();
   const page = t.talks;
+
+  useHead({
+    title: language === 'es' ? 'Charlas' : 'Talks',
+    description: language === 'es'
+      ? 'Colección de charlas sobre ingeniería de software, desarrollo móvil y tecnología.'
+      : 'A collection of talks on software engineering, mobile development, and technology.',
+    canonicalPath: '/talks',
+    lang: language,
+  });
 
   // Talks data with assets
   const talks: Talk[] = [

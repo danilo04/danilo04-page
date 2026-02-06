@@ -2,12 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
 import { useLanguage } from '../components/language-provider';
+import { useHead } from '../hooks/useHead';
+import { JsonLd, getBlogSchema } from '../components/JsonLd';
 import { getAllPosts } from '../content/blog';
 
 const BlogPage: React.FC = () => {
   const t = useTranslations();
   const { language } = useLanguage();
   const posts = getAllPosts(language);
+
+  useHead({
+    title: 'Blog',
+    description: language === 'es'
+      ? 'Pensamientos sobre ingeniería de software, arquitectura y tecnología.'
+      : 'Thoughts on software engineering, architecture, and technology.',
+    canonicalPath: '/blog',
+    lang: language,
+  });
 
   const categoryColors: Record<string, { bg: string; text: string; darkBg: string; darkText: string }> = {
     engineering: { bg: 'bg-blue-100', text: 'text-blue-600', darkBg: 'dark:bg-blue-900/30', darkText: 'dark:text-blue-400' },
@@ -27,6 +38,7 @@ const BlogPage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={getBlogSchema()} />
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden">
         {/* Background pattern */}

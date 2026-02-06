@@ -1,9 +1,21 @@
 import React from 'react';
 import { useTranslations } from '../hooks/useTranslations';
+import { useHead } from '../hooks/useHead';
+import { useLanguage } from '../components/language-provider';
 
 const ResearchPage: React.FC = () => {
   const t = useTranslations();
+  const { language } = useLanguage();
   const page = t.researchPage;
+
+  useHead({
+    title: language === 'es' ? 'Investigación y Publicaciones' : 'Research & Publications',
+    description: language === 'es'
+      ? 'Investigación en ingeniería de software, análisis estático y pruebas para mejorar la calidad de aplicaciones móviles.'
+      : 'Research in software engineering, static analysis, and testing to improve mobile application quality.',
+    canonicalPath: '/research',
+    lang: language,
+  });
 
   return (
     <div className="min-h-screen">

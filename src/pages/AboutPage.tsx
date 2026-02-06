@@ -1,14 +1,26 @@
 import React, { useState } from 'react';
 import { useTranslations } from '../hooks/useTranslations';
+import { useHead } from '../hooks/useHead';
+import { useLanguage } from '../components/language-provider';
+import { JsonLd, getPersonSchema } from '../components/JsonLd';
 import daniloImage from '../assets/danilo-cartoon.png';
 
 const AboutPage: React.FC = () => {
   const t = useTranslations();
+  const { language } = useLanguage();
   const page = t.aboutPage;
   const [isProfileExpanded, setIsProfileExpanded] = useState(true);
 
+  useHead({
+    title: language === 'es' ? 'Sobre Mí' : 'About Me',
+    description: page.hero.summary,
+    canonicalPath: '/about',
+    lang: language,
+  });
+
   return (
     <div className="min-h-screen">
+      <JsonLd data={getPersonSchema()} />
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden">
         {/* Background pattern */}

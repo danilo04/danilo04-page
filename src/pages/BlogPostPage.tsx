@@ -2,6 +2,8 @@ import React from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
 import { useLanguage } from '../components/language-provider';
+import { useHead } from '../hooks/useHead';
+import { JsonLd, getBlogPostingSchema } from '../components/JsonLd';
 import { getPostBySlug, getRelatedPosts } from '../content/blog';
 import { MDXProvider } from '../components/MDXProvider';
 import { BlogInteractions } from '../components/BlogInteractions';
@@ -18,6 +20,21 @@ const BlogPostPage: React.FC = () => {
   
   const post = slug ? getPostBySlug(slug, language) : undefined;
   const relatedPosts = slug ? getRelatedPosts(slug, language, 2) : [];
+
+  const altLang = language === 'en' ? 'es' : 'en';
+
+  useHead({
+    title: post ? post.frontmatter.title : t.blog.postNotFound,
+    description: post ? post.frontmatter.summary : t.blog.postNotFoundDescription,
+    ogImage: post?.frontmatter.coverImage,
+    canonicalPath: slug ? `/blog/${slug}` : '/blog',
+    type: post ? 'article' : 'website',
+    publishedTime: post?.frontmatter.date,
+    author: post?.frontmatter.author,
+    tags: post?.frontmatter.tags,
+    lang: language,
+    alternateLangPath: slug ? `/blog/${slug}?lang=${altLang}` : undefined,
+  });
 
   const categoryColors: Record<string, { bg: string; text: string; darkBg: string; darkText: string }> = {
     engineering: { bg: 'bg-blue-100', text: 'text-blue-600', darkBg: 'dark:bg-blue-900/30', darkText: 'dark:text-blue-400' },
@@ -61,6 +78,15 @@ const BlogPostPage: React.FC = () => {
 
   return (
     <div className="min-h-screen">
+      <JsonLd data={getBlogPostingSchema({
+        title: frontmatter.title,
+        description: frontmatter.summary,
+        slug: frontmatter.slug,
+        datePublished: frontmatter.date,
+        author: frontmatter.author,
+        coverImage: frontmatter.coverImage,
+        tags: frontmatter.tags,
+      })} />
       {/* Hero Section */}
       <section className="relative pt-24 pb-12 overflow-hidden">
         {/* Background pattern */}
