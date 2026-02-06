@@ -3,6 +3,163 @@ interface Env {
   ASSETS_BUCKET: R2Bucket;
 }
 
+const SITE_URL = "https://danilo04.dev";
+
+// ----- Blog post metadata for social sharing (OG / Twitter Cards) -----
+interface PostMeta {
+  title: string;
+  summary: string;
+  coverImage: string;
+  author: string;
+  date: string;
+}
+
+// Each post has English and Spanish variants
+const POSTS_META: Record<string, { en: PostMeta; es: PostMeta }> = {
+  "reactive-android-kotlin-flows": {
+    en: {
+      title: "Building Reactive Android Apps with Kotlin Flows",
+      summary:
+        "A deep dive into using Kotlin Flows to build reactive, responsive Android applications. Learn how to handle asynchronous data streams effectively.",
+      coverImage:
+        "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=1200&h=630&fit=crop",
+      author: "Danilo Dominguez",
+      date: "2026-01-06",
+    },
+    es: {
+      title: "Construyendo Apps Android Reactivas con Kotlin Flows",
+      summary:
+        "Una inmersión profunda en el uso de Kotlin Flows para construir aplicaciones Android reactivas y responsivas. Aprende a manejar flujos de datos asíncronos de manera efectiva.",
+      coverImage:
+        "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=1200&h=630&fit=crop",
+      author: "Danilo Dominguez",
+      date: "2026-01-06",
+    },
+  },
+  "software-quality-mobile-apps": {
+    en: {
+      title: "The importance of quality in mobile app development",
+      summary:
+        "In this article, we will explore the importance of quality in mobile app development and how we can improve the quality of our applications.",
+      coverImage: `${SITE_URL}/software-quality-mobile-header.svg`,
+      author: "Danilo Dominguez",
+      date: "2026-01-14",
+    },
+    es: {
+      title:
+        "La importancia de la calidad en el desarrollo de aplicaciones móviles",
+      summary:
+        "En este artículo, exploraremos la importancia de la calidad en el desarrollo de aplicaciones móviles y cómo podemos mejorar la calidad de nuestras aplicaciones.",
+      coverImage: `${SITE_URL}/software-quality-mobile-header.svg`,
+      author: "Danilo Dominguez",
+      date: "2026-01-14",
+    },
+  },
+  "zoom-and-other-effects-compose": {
+    en: {
+      title: "Zoom and other effects in Compose",
+      summary:
+        "In this article, we will explore the effects such as pinch zoom and panning in Compose.",
+      coverImage: `${SITE_URL}/zoom-compose-cover.png`,
+      author: "Danilo Dominguez",
+      date: "2026-01-23",
+    },
+    es: {
+      title: "Zoom y otros efectos en Compose",
+      summary:
+        "En este artículo, exploraremos los efectos como el zoom con pellizco y el desplazamiento (panning) en Compose.",
+      coverImage: `${SITE_URL}/zoom-compose-cover.png`,
+      author: "Danilo Dominguez",
+      date: "2026-01-23",
+    },
+  },
+};
+
+// Social-media and messaging-app crawlers that read OG / Twitter Card tags
+const CRAWLER_UA_PATTERNS = [
+  "Twitterbot",
+  "facebookexternalhit",
+  "LinkedInBot",
+  "WhatsApp",
+  "Slackbot",
+  "TelegramBot",
+  "Discordbot",
+  "Embedly",
+  "Quora Link Preview",
+  "Showyoubot",
+  "outbrain",
+  "Pinterest",
+  "vkShare",
+  "W3C_Validator",
+  "Baiduspider",
+  "Googlebot",
+];
+
+function isCrawler(userAgent: string | null): boolean {
+  if (!userAgent) return false;
+  return CRAWLER_UA_PATTERNS.some((bot) =>
+    userAgent.toLowerCase().includes(bot.toLowerCase())
+  );
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
+ * Build a minimal HTML page with the correct OG / Twitter Card meta tags.
+ * Crawlers only read <head> meta; they don't need the full SPA bundle.
+ * A <meta http-equiv="refresh"> redirects real browsers that somehow land here.
+ */
+function buildCrawlerHtml(
+  post: PostMeta,
+  slug: string,
+  lang: "en" | "es"
+): string {
+  const pageUrl = `${SITE_URL}/blog/${slug}`;
+  const fullTitle = `${escapeHtml(post.title)} | Danilo Dominguez`;
+  const description = escapeHtml(post.summary);
+  const image = escapeHtml(post.coverImage);
+  const locale = lang === "es" ? "es_ES" : "en_US";
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${fullTitle}</title>
+  <meta name="description" content="${description}">
+  <meta name="author" content="${escapeHtml(post.author)}">
+  <link rel="canonical" href="${pageUrl}">
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Danilo Dominguez">
+  <meta property="og:title" content="${fullTitle}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:url" content="${pageUrl}">
+  <meta property="og:image" content="${image}">
+  <meta property="og:locale" content="${locale}">
+  <meta property="article:published_time" content="${post.date}">
+  <meta property="article:author" content="${escapeHtml(post.author)}">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@danilo04">
+  <meta name="twitter:title" content="${fullTitle}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${image}">
+  <!-- Redirect real browsers to the SPA -->
+  <meta http-equiv="refresh" content="0;url=${pageUrl}">
+</head>
+<body>
+  <p>Redirecting to <a href="${pageUrl}">${escapeHtml(post.title)}</a>…</p>
+</body>
+</html>`;
+}
+
 // Map of public URL paths to R2 object keys
 const R2_MEDIA_FILES: Record<string, string> = {
   "/media/sample-app-graphics-layer.mp4": "sample-app-graphics-layer.mp4",
@@ -24,6 +181,29 @@ export default {
   async fetch(request: Request, env: Env) {
     const url = new URL(request.url);
     const pathParts = url.pathname.split("/");
+    const userAgent = request.headers.get("User-Agent");
+
+    // --- Social-media crawler interception for blog posts ---
+    // Serve pre-rendered meta tags so OG / Twitter Cards show the right
+    // title, description, and thumbnail when links are shared.
+    const blogPostMatch = url.pathname.match(/^\/blog\/([a-z0-9-]+)\/?$/);
+    if (blogPostMatch && isCrawler(userAgent)) {
+      const slug = blogPostMatch[1];
+      const postMeta = POSTS_META[slug];
+      if (postMeta) {
+        const langParam = url.searchParams.get("lang");
+        const lang: "en" | "es" =
+          langParam === "es" ? "es" : "en";
+        const html = buildCrawlerHtml(postMeta[lang], slug, lang);
+        return new Response(html, {
+          status: 200,
+          headers: {
+            "Content-Type": "text/html; charset=utf-8",
+            "Cache-Control": "public, max-age=3600",
+          },
+        });
+      }
+    }
 
     // Serve media files from R2
     if (url.pathname.startsWith("/media/")) {
