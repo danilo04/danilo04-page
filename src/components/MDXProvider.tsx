@@ -99,8 +99,8 @@ const components = {
         if (typeof node === 'string') return node;
         if (typeof node === 'number') return String(node);
         if (Array.isArray(node)) return node.map(extractText).join('');
-        if (React.isValidElement(node) && node.props.children) {
-          return extractText(node.props.children);
+        if (React.isValidElement(node) && (node.props as { children?: React.ReactNode }).children) {
+          return extractText((node.props as { children?: React.ReactNode }).children);
         }
         return '';
       };
@@ -134,7 +134,7 @@ const components = {
                 className={`${className} block text-sm md:text-base text-slate-100 font-mono p-4 md:p-6`}
                 style={{ lineHeight: '1.75', whiteSpace: 'pre' }}
               >
-                {child.props.children}
+                {(child.props as { children?: React.ReactNode }).children}
               </code>
             </div>
           </div>
