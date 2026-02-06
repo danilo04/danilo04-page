@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danilo04.dev/sitemap.xml
