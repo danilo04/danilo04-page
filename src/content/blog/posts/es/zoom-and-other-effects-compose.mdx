@@ -1,12 +1,12 @@
 ---
 slug: zoom-and-other-effects-compose
-title: Zoom and other effects in Compose
-summary: In this article, we will explore the effects such as pinch zoom and panning in Compose.
+title: Zoom y otros efectos en Compose
+summary: En este artículo, exploraremos los efectos como el zoom con pellizco y el desplazamiento (panning) en Compose.
 category: mobile
-coverImage: /software-quality-mobile-header.svg
+coverImage: /zoom-compose-cover.png
 author: Danilo Dominguez
 date: 2026-01-23
-readTime: 10 min read
+readTime: 10 min de lectura
 tags:
   - Quality
   - Mobile
@@ -18,21 +18,21 @@ tags:
 published: true
 ---
 
-In this article, we will explore the implement of effects of pinch zoom in Compose and try to understand the different APIs that we can use to achieve this. Some of the effects that we will explore are:
-- Pinch zoom: is a common gesture in mobile applications. It is used to zoom in and out of a view. 
-- Panning: is a common gesture in mobile applications. It is used to move a view around.
+En este artículo, exploraremos la implementación de efectos de zoom con pellizco en Compose e intentaremos comprender las diferentes APIs que podemos utilizar para lograrlo. Algunos de los efectos que exploraremos son:
+- Zoom con pellizco (Pinch zoom): es un gesto común en aplicaciones móviles. Se utiliza para acercar y alejar una vista.
+- Desplazamiento (Panning): es un gesto común en aplicaciones móviles. Se utiliza para mover una vista.
 
-## The GraphicsLayer API
+## La API GraphicsLayer
 
-Le us introduce one component that we will use to apply the effects: the **GraphicsLayer**. GraphicsLayer is a drawing layer that records drawing commands into a display list and stores rendering properties. It isolates parts of a scene so they can be updated independently without rebuilding the whole scene. Transformations can be applied without re-recording the display list.
+Presentemos un componente que usaremos para aplicar los efectos: el **GraphicsLayer**. GraphicsLayer es una capa de dibujo que registra comandos de dibujo en una lista de visualización y almacena propiedades de renderizado. Aísla partes de una escena para que puedan actualizarse de forma independiente sin reconstruir toda la escena. Las transformaciones pueden aplicarse sin volver a grabar la lista de visualización.
 
 
-When drawing the display list into a destination Canvas, you can apply transformations by setting `scaleX`, `scaleY`, `translationX`, `translationY`, `rotationX`, `rotationY`, or `rotationZ`.
+Al dibujar la lista de visualización en un Canvas de destino, puedes aplicar transformaciones configurando `scaleX`, `scaleY`, `translationX`, `translationY`, `rotationX`, `rotationY` o `rotationZ`.
 
-Imagine we have an Imagen that we want to apply a zoom effect to. We can control the zoom effect by setting the `scaleX` and `scaleY` properties.
+Imagina que tenemos una imagen a la que queremos aplicar un efecto de zoom. Podemos controlar el efecto de zoom configurando las propiedades `scaleX` y `scaleY`.
 ```kotlin
 Image(
-    ... // other properties
+    ... // otras propiedades
     modifier = Modifier.graphicsLayer {
         scaleX = 2f
         scaleY = 2f
@@ -40,14 +40,14 @@ Image(
 )
 ```
 
-In this example, we are setting the `scaleX` and `scaleY` properties to `2f`, which means that the image will be zoomed in by 2 times.
+En este ejemplo, estamos configurando las propiedades `scaleX` y `scaleY` a `2f`, lo que significa que la imagen se ampliará 2 veces.
 
-To evaluate how the GraphicsLayer API works, I built a simple example to show how scale and translation works. 
+Para evaluar cómo funciona la API GraphicsLayer, construí un ejemplo simple para mostrar cómo funcionan la escala y la translación.
 
 <Video src="/sample-app-graphics-layer.mp4" />
 
 
-First, we use the `Modifier.graphicsLayer` modifier to set the `scaleX` and `scaleY` properties using values from a `Slider`. Similarly, we use a `Slider` to set the `translationX` and `translationY` properties.
+Primero, usamos el modificador `Modifier.graphicsLayer` para configurar las propiedades `scaleX` y `scaleY` usando valores de un `Slider`. De manera similar, usamos un `Slider` para configurar las propiedades `translationX` y `translationY`.
 
 ```kotlin
 class ZoomableState(
@@ -57,7 +57,7 @@ class ZoomableState(
 ) {
      var offset by mutableStateOf(Offset.Zero)
         internal set
-    ... // rest of the implementation.
+    ... // resto de la implementación.
 }
 
 @Composable
@@ -84,7 +84,444 @@ private fun GalleryImage(zoomableState: ZoomableState, modifier: Modifier = Modi
 }
 ```
 
-Now that we have the tools to apply the effects to the images, we now focus on detecting the user gestures. 
+Podemos aplicar efectos de zoom usando el modificador `Modifier.graphicsLayer` y las propiedades `scaleX` y `scaleY`. Para aplicar efectos de desplazamiento, usamos `translationX` y `translationY`. Modificar estas propiedades mueve la imagen por la pantalla. Queremos lograr el mismo efecto con un gesto.
 
-## Detecting the user gestures
+Ahora que tenemos las herramientas para aplicar los efectos a las imágenes, nos enfocamos en detectar los gestos del usuario.
 
+## Detectando los gestos del usuario
+
+Intentemos comprender algunos conceptos antes de comenzar a implementar la detección de gestos:
+
+- **Puntero (Pointer)**: es el objeto que representa la entrada táctil, del lápiz óptico o del ratón del usuario.
+- **Evento de puntero (Pointer event)**: es el evento que se desencadena cuando uno o más punteros interactúan con la aplicación.
+- **Gesto (Gesture)**: es una secuencia de eventos de puntero que son detectados por el sistema y pueden interpretarse como una única acción.
+
+Compose ofrece varios modificadores para diferentes tipos de gestos:
+
+| Tipo de gesto | Modificadores |
+|--------------|-----------|
+| Toques y pulsaciones | `clickable`, `combinedClickable`, `selectable`, `toggleable`, `triStateToggleable` |
+| Desplazamiento (Scroll) | `horizontalScroll`, `verticalScroll`, `scrollable` |
+| Arrastre | `draggable`, `swipeable` |
+| Multi-toque (Desplazamiento, Rotación, Zoom) | `transformable` |
+
+Sin embargo, si queremos detectar gestos más complejos, podemos usar el modificador `Modifier.pointerInput`. Este modificador nos permite detectar los gestos del usuario y aplicar los efectos a la imagen.
+
+
+### Modificador `pointerInput`
+
+Vamos a usar el modificador `Modifier.pointerInput` para detectar los gestos del usuario, comenzando con los gestos de zoom con dos dedos. Intentemos entender cómo funciona este modificador. Primero, necesitamos comprender cómo se define el modificador `pointerInput`:
+
+```kotlin
+fun Modifier.pointerInput(key1: Any?, block: suspend PointerInputScope.() -> Unit): Modifier
+```
+
+o con dos claves:
+
+```kotlin
+fun Modifier.pointerInput(key1: Any?, key2: Any?, block: suspend PointerInputScope.() -> Unit): Modifier
+```
+
+Observa que el parámetro `block` es una función suspendida de tipo `PointerInputScope`. Este ámbito proporciona un conjunto de funciones (algunas de ellas funciones de extensión) para detectar los gestos del usuario.
+
+Aquí están las principales funciones de extensión de detección de gestos disponibles para PointerInputScope:
+
+| Categoría | Función | Descripción |
+|----------|----------|-------------|
+| **Gestos de toque y pulsación** | `detectTapGestures(...)` | Detecta toques simples, doble toque, pulsaciones largas y eventos de pulsación. Parámetros: `onDoubleTap`, `onLongPress`, `onPress`, `onTap`. |
+| | `detectTapAndPress(...)` | Una variante, a veces usada en implementaciones de bajo nivel para manejar la separación entre pulsación y toque. |
+| **Gestos de arrastre y deslizamiento** | `detectDragGestures(...)` | Detecta gestos de arrastre, proporcionando callbacks para inicio, fin, cancelación y movimiento. |
+| | `detectHorizontalDragGestures(...)` | Detecta específicamente movimiento de arrastre horizontal. |
+| | `detectVerticalDragGestures(...)` | Detecta específicamente movimiento de arrastre vertical. |
+| | `detectDragGesturesAfterLongPress(...)` | Inicia el arrastre solo después de detectar una pulsación larga. |
+| **Gestos multi-toque (Transformación)** | `detectTransformGestures(...)` | Detecta gestos multi-toque como desplazamiento, zoom y rotación. Proporciona los valores de centroide, desplazamiento, zoom y rotación. |
+| **Otros/Personalizados** | `awaitEachGesture(...)` | Una función auxiliar de bajo nivel que se usa frecuentemente para envolver otros detectores de gestos y asegurar que se reinicien correctamente después de completar un gesto. |
+
+
+Hay dos formas de detectar el gesto de zoom con dos dedos. Podemos usar la función `awaitEachGesture` o la función `detectTransformGestures`. Vamos a implementar ambos enfoques.
+
+#### Función `detectTransformGestures`
+
+La función `detectTransformGestures` se define de la siguiente manera:
+```kotlin
+suspend fun PointerInputScope.detectTransformGestures(
+    panZoomLock: Boolean = false,
+    onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Unit
+)
+```
+
+La función toma dos parámetros:
+- `panZoomLock`: si es verdadero, la rotación solo se permite si se detecta el umbral de movimiento (touch slop) para rotación antes que los movimientos de desplazamiento o zoom. Si no, se detectarán los gestos de desplazamiento y zoom, pero no los de rotación. Si panZoomLock es falso, una vez que se alcanza el umbral de movimiento, se detectan los tres gestos.
+- `onGesture`: una función callback que se llama cuando el usuario realiza un gesto de transformación. Este callback proporciona información suficiente para aplicar los efectos de zoom y desplazamiento a la imagen.
+
+Comenzamos implementando la función `detectTransformGestures` en el modificador `Modifier.zoomable`.
+
+```kotlin
+@Composable
+fun Modifier.zoomable(
+    state: ZoomableState,
+    modifier: Modifier = Modifier,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    return this
+        .pointerInput(state.minScale, state.maxScale) {
+            detectTransformGestures(
+                onGesture = { centroid, pan, gestureZoom, gestureRotate ->
+
+                }
+            )
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+Con esta información (centroide, desplazamiento y gestureZoom), estamos listos para calcular los valores de escala y desplazamiento para aplicarlos a las propiedades `scaleX`, `scaleY`, `translationX` y `translationY` del modificador `graphicsLayer`. Para calcular el valor de escala, necesitamos calcular la distancia entre los dos dedos y dividirla por la distancia inicial entre los dos dedos.
+
+Definamos un método para calcular el valor de escala:
+```kotlin
+fun computeScale(gestureZoom: Float): Float {
+    return (scale * gestureZoom).coerceIn(state.minScale, state.maxScale)
+}
+```
+
+Calculamos el valor de escala multiplicando la escala actual por gestureZoom y limitando el resultado entre los valores mínimo y máximo de escala.
+
+Para calcular el valor de desplazamiento, simplemente sumamos el valor de pan al desplazamiento actual.
+```kotlin
+fun computeOffset(pan: Offset): Offset {
+    return offset + pan
+}
+```
+
+Actualicemos la función `detectTransformGestures` para usar los métodos `computeScale` y `computeOffset`:
+
+```kotlin
+@Composable
+fun Modifier.zoomableTransformGesture(
+    zoomableState: ZoomableState,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+
+    fun computeScale(gestureZoom: Float): Float {
+        return (scale * gestureZoom).coerceIn(zoomableState.minScale, zoomableState.maxScale)
+    }
+
+    fun computeOffset(pan: Offset): Offset {
+        return offset + pan
+    }
+
+    return this
+        .pointerInput(zoomableState.minScale, zoomableState.maxScale) {
+            detectTransformGestures(
+                onGesture = { _, pan, gestureZoom, _ ->
+                    scale = computeScale(gestureZoom)
+                    offset = computeOffset(pan)
+                    onZoomChange?.invoke(scale)
+                }
+            )
+        }.graphicsLayer {
+            translationX = offset.x
+            translationY = offset.y
+            scaleX = scale
+            scaleY = scale
+        }
+}
+```
+
+Esta implementación todavía tiene algunos problemas. Al realizar un gesto de desplazamiento, nos movemos fuera de la imagen. Mira el video a continuación:
+
+![Configurando eventos táctiles en Compose](/touch-events-setup.GIF)
+
+Necesitamos limitar el gesto de desplazamiento a los límites de la imagen. Para hacer esto, necesitamos calcular el valor máximo de desplazamiento basado en el tamaño de la imagen y el valor de escala actual. Para obtener el tamaño de la imagen, usamos el modificador `Modifier.onSizeChange` para obtener el tamaño de la imagen.
+
+```kotlin
+var containerSize by remember { mutableStateOf(IntSize.Zero) }
+
+    return this
+        .onSizeChanged { containerSize = it }
+```
+
+Podemos usar el `containerSize` para calcular el valor máximo de desplazamiento.
+```kotlin
+fun computeOffset(pan: Offset): Offset {
+    val maxOffsetX = (scale - 1f) * containerSize.width / 2f
+    val maxOffsetY = (scale - 1f) * containerSize.height / 2f
+
+    // Multiplicamos la escala para que el gesto de desplazamiento se mueva a la misma velocidad en cualquier nivel de zoom.
+    val newOffset = offset + pan * scale 
+    return Offset(
+        newOffset.x.coerceIn(-maxOffsetX, maxOffsetX),
+        newOffset.y.coerceIn(-maxOffsetY, maxOffsetY)
+    )
+}
+```
+
+Ahora, limitamos el gesto de desplazamiento a los límites de la imagen para el ancho. Para la altura, todavía podemos desplazarnos fuera de la imagen hacia el [letterbox](https://es.wikipedia.org/wiki/Letterbox). Para evitar desplazarnos fuera de la imagen, necesitamos calcular el valor máximo de desplazamiento basado en el tamaño de la imagen y el valor de escala actual. También necesitamos el tamaño de la imagen. Vamos a usar el callback `onSuccess` en `AsyncImage` para obtener el tamaño de la imagen.
+
+```kotlin
+var imageSize by remember { mutableStateOf(IntSize.Zero) }
+
+AsyncImage(
+    model = model,
+    contentDescription = null,
+    modifier = Modifier,
+    contentScale = ContentScale.Fit,
+    onSuccess = { result ->
+        val drawable = result.result.drawable
+        imageSize = IntSize(drawable.intrinsicWidth, drawable.intrinsicHeight)
+    }
+)
+```
+
+Con el tamaño del contenedor y el tamaño de la imagen, podemos calcular el valor máximo de desplazamiento para el ancho y la altura.
+
+![Tamaño de imagen versus tamaño del contenedor](/zoom-image-size.png)
+
+```kotlin
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+    var containerSize by remember { mutableStateOf(IntSize.Zero) }
+
+    fun computeScale(gestureZoom: Float): Float {
+        return (scale * gestureZoom).coerceIn(zoomableState.minScale, zoomableState.maxScale)
+    }
+
+    val w = containerSize.width.toFloat()
+    val h = containerSize.height.toFloat()
+    val iw = imageIntrinsicSize.width.toFloat()
+    val ih = imageIntrinsicSize.height.toFloat()
+
+    val fittedHeight = w * (ih / iw)
+
+    val coverScaleY = h / fittedHeight 
+
+    fun computeOffsetY(panY: Float): Float {
+        // Antes de que la imagen cubra arriba+abajo, no permitir desplazamiento vertical
+        if (scale <= coverScaleY) return 0f
+
+        // Una vez que cubre, permitir desplazamiento pero limitar para que solo la imagen sea visible
+        val maxOffsetY = (fittedHeight * scale - h) / 2f
+        val newY = offset.y + panY
+        return newY.coerceIn(-maxOffsetY, maxOffsetY)
+    }
+
+    fun computeOffset(pan: Offset): Offset {
+        val maxOffsetX = (scale - 1f) * containerSize.width / 2f
+    
+
+        val newOffset = offset + pan * scale
+        return Offset(
+            newOffset.x.coerceIn(-maxOffsetX, maxOffsetX),
+            computeOffsetY(pan.y)
+        )
+    }
+```
+
+Permítanme explicar el código paso a paso:
+
+- **`ContentScale.Fit`**: observa que estamos usando `ContentScale.Fit` para ajustar la imagen al contenedor. Esto es importante porque nos permite calcular el valor máximo de desplazamiento para el ancho y la altura.
+- **`fittedHeight`** — Altura de la imagen cuando su ancho se ajusta al contenedor: `w * (ih/iw)`.
+- **`coverScaleY`** — Cuando haces zoom con escala `s`, la imagen cubrirá la altura del contenedor cuando `s >= coverScaleY`. Podemos usar este valor para verificar si podemos desplazarnos verticalmente porque la escala ha cubierto el letterbox.
+- **`computeOffsetY`** — Retorna 0 cuando `scale <= coverScaleY` para evitar desplazarse fuera de la imagen; de lo contrario, limita el desplazamiento vertical a `±(fittedHeight * scale - h) / 2` para que solo la imagen sea visible.
+
+Si la pantalla está en modo horizontal, la imagen será más ancha que el contenedor. Necesitamos aplicar una lógica similar al ancho para evitar desplazarnos fuera de la imagen.
+
+
+#### Función `awaitEachGesture`
+
+Otro enfoque para detectar los gestos de zoom y desplazamiento es usar la función `awaitEachGesture`. Esta función nos permite detectar los gestos del usuario y aplicar los efectos a la imagen.
+
+```kotlin
+suspend fun PointerInputScope.awaitEachGesture(block: suspend AwaitPointerEventScope.() -> Unit): Unit
+```
+
+La función `awaitEachGesture` toma un bloque como parámetro que se ejecuta cuando el usuario interactúa con la aplicación. El bloque es una función suspendida que toma un `AwaitPointerEventScope` como parámetro.
+
+Comenzamos la definición del modificador `Modifier.zoomableAwaitEachGesture` de la siguiente manera:
+
+```kotlin
+@Composable 
+fun Modifier.zoomableAwaitEachGesture(
+    zoomableState: ZoomableState,
+    imageIntrinsicSize: IntSize,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    ....
+    
+    return this
+        .onSizeChanged { containerSize = it }
+        .pointerInput(state.minScale, state.maxScale) {
+            awaitEachGesture {
+                // Esperar el toque inicial.
+                awaitFirstDown(requireUnconsumed = false)
+        
+                do {
+                    // Esperar el siguiente evento.
+                    val event = awaitPointerEvent()
+
+                  // Seguir procesando eventos mientras al menos un dedo esté presionado.   
+                } while (event.changes.any { it.pressed }) 
+            }
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+Aquí hay un video de cuándo se ejecutan estos eventos:
+
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+  <img src="/touch-events-setup.GIF" alt="Demostración de configuración de eventos táctiles" width="400" style={{ display: 'block' }} />
+</div>
+
+<div style={{ paddingBottom: '2rem' }} />
+
+
+Estudiemos el código paso a paso. Primero, comenzamos definiendo el modificador `Modifier.zoomableAwaitEachGesture`. Este modificador aplica el efecto de zoom a la imagen. En la línea `11`, usamos la función `awaitFirstDown` para esperar el toque inicial. No bloquea el hilo principal y se suspende hasta que el usuario toca la pantalla. No nos importa si el evento ya fue consumido por otro componente, por lo que configuramos `requireUnconsumed` como `false`.
+
+Una vez que el usuario toca la imagen, entramos en el bucle `do` para escuchar los siguientes eventos. Estos eventos se procesan hasta que el usuario suelta el toque. Usamos la función `awaitPointerEvent` para esperar el siguiente evento. Esta función retorna un objeto `PointerEvent`. Luego procesamos el evento en el bucle `do`.
+
+Para detectar cuándo el usuario suelta el toque, ejecutamos el bucle `do` mientras al menos un dedo esté presionado. Un objeto `PointerEvent` tiene una propiedad `changes` que contiene una lista de objetos `PointerChange`. Cada objeto `PointerChange` representa un cambio en el estado del puntero. Por ejemplo, si el usuario toca la pantalla con dos dedos, la propiedad `changes` contendrá dos objetos `PointerChange`. Uno por cada dedo. Verificamos esto con la expresión `any { it.pressed }` que comprueba si al menos un dedo está presionado.
+
+### Detectando los gestos de zoom y desplazamiento
+
+Primero, necesitamos verificar el `PointerEventType` del evento. Necesitamos comprobar si el evento es un `PointerEventType.Move`. Luego, verificamos cuántos dedos están presionados. Si hay dos dedos, podemos calcular los valores de zoom y desplazamiento. Si solo hay un dedo, podemos calcular el valor de desplazamiento.
+
+```kotlin
+@Composable 
+fun Modifier.zoomableAwaitEachGesture(
+    zoomableState: ZoomableState,
+    imageIntrinsicSize: IntSize,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    ....
+    
+    return this
+        .onSizeChanged { containerSize = it }
+        .pointerInput(state.minScale, state.maxScale) {
+            awaitEachGesture {
+                // Esperar el toque inicial.
+                awaitFirstDown(requireUnconsumed = false)
+        
+                do {
+                    // Esperar el siguiente evento.
+                    val event = awaitPointerEvent()
+                    if (event.type == PointerEventType.Move) {
+                        if (pointerCount >= 2) {
+                            // Gesto de zoom
+    
+                            onZoomChange?.invoke(scale)
+                        } else {
+                            // Gesto de desplazamiento
+                            
+                        }
+                    }
+
+                  // Seguir procesando eventos mientras al menos un dedo esté presionado.   
+                } while (event.changes.any { it.pressed }) 
+            }
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+
+Ahora, necesitamos calcular los valores de zoom y desplazamiento. Podemos usar los métodos `computeScale` y `computeOffset` para calcular los valores de zoom y desplazamiento. Pero primero, necesitamos obtener los valores de zoom y desplazamiento del evento. Para eso vamos a usar las funciones de extensión `PointerEvent.calculateZoom()` y `PointerEvent.calculatePan()`.
+
+```kotlin
+@Composable 
+fun Modifier.zoomableAwaitEachGesture(
+    zoomableState: ZoomableState,
+    imageIntrinsicSize: IntSize,
+    onZoomChange: ((Float) -> Unit)? = null
+): Modifier {
+    ....
+    
+    return this
+        .onSizeChanged { containerSize = it }
+        .pointerInput(state.minScale, state.maxScale) {
+            awaitEachGesture {
+                // Esperar el toque inicial.
+                awaitFirstDown(requireUnconsumed = false)
+        
+                do {
+                    // Esperar el siguiente evento.
+                    val event = awaitPointerEvent()
+                    if (event.type == PointerEventType.Move) {
+                        if (pointerCount >= 2) {
+                            // Gesto de zoom
+                            val gestureZoom = event.calculateZoom()
+                            val pan = event.calculatePan()
+
+                            scale = computeScale(gestureZoom)
+                            offset = computeOffset(pan)
+                            onZoomChange?.invoke(scale)
+
+                            // Consumir los cambios
+                            event.changes.forEach { change ->
+                                if (change.positionChanged()) {
+                                    change.consume()
+                                }
+                            }
+                        } else {
+                            // Gesto de desplazamiento
+                            val pan = event.calculatePan()
+                            offset = computeOffset(pan)
+
+                            // Consumir los cambios
+                            event.changes.forEach { change ->
+                                if (change.positionChanged()) {
+                                    change.consume()
+                                }
+                            }
+                        }
+                    }
+
+                  // Seguir procesando eventos mientras al menos un dedo esté presionado.   
+                } while (event.changes.any { it.pressed }) 
+            }
+        }.graphicsLayer {
+            scaleX = scale
+            scaleY = scale
+            translationX = offset.x
+            translationY = offset.y
+        }
+}
+```
+
+Observa que estamos "consumiendo" los cambios. Esto es importante porque nos permite evitar que el evento sea procesado por otros componentes. Si no consumimos los cambios, el evento será procesado por otros componentes y la imagen podría no actualizarse correctamente. Permíteme explicar cada una de las funciones:
+
+- `change.positionChanged()`: verdadero si la posición de ese puntero cambió en este evento (por ejemplo, el dedo se movió).
+- `change.consume()`: Marca el cambio de ese puntero como consumido por este modificador.
+
+**¿Por qué consumir?**
+
+En el sistema de entrada de Compose, consumir un cambio significa: "este modificador ha manejado esta entrada de puntero." Efectos:
+- **Impide que otros manejadores usen el mismo movimiento**: Así, un padre (por ejemplo, un Scrollable vertical o un pager) u otro detector de gestos no reaccionará al mismo arrastre. Sin consumir, tanto la imagen con zoom como el padre podrían moverse, lo cual se siente incorrecto.
+- **Deja claro que el gesto fue "utilizado"**: El sistema puede tratar el evento como manejado y no aplicar el comportamiento predeterminado (por ejemplo, scroll) sobre él.
+
+Entonces, en la práctica: "Hemos aplicado este movimiento a nuestro zoom/desplazamiento; marcamos estos movimientos de puntero como consumidos para que nada más (como un scroll padre) reaccione a ellos."
+
+## Conclusión
+
+En este artículo, hemos visto dos enfoques para detectar los gestos de zoom y desplazamiento en Compose. El primer enfoque es usar la función `detectTransformGestures`. Esta función nos permite detectar los gestos de zoom y desplazamiento y aplicar los efectos a la imagen. El segundo enfoque es usar la función `awaitEachGesture`. Esta función nos permite detectar los gestos del usuario y aplicar los efectos a la imagen.
+
+También hemos visto cómo calcular los valores de zoom y desplazamiento a partir del evento. También hemos visto cómo consumir los cambios para evitar que el evento sea procesado por otros componentes. Esto es importante no solo para efectos sino también para manejar otros gestos como el scroll o implementar otros efectos.
+
+Espero que hayas disfrutado este artículo. Si tienes alguna pregunta, no dudes en preguntarme.

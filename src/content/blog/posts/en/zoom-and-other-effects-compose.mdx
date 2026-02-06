@@ -284,7 +284,7 @@ AsyncImage(
 
 With the container size and the image size, we can compute the maximum offset value for width and height. 
 
-[Image size versus container size](/zoom-image-size.png)
+![Image size versus container size](/zoom-image-size.png)
 
 ```kotlin
     var scale by remember { mutableFloatStateOf(1f) }
@@ -346,7 +346,7 @@ suspend fun PointerInputScope.awaitEachGesture(block: suspend AwaitPointerEventS
 
 The `awaitEachGesture` function takes a block as a parameter that is executed when the user interacts with the application. The block is a suspend function that takes a `AwaitPointerEventScope` as a parameter. 
 
-We start the definition of the `Modifier.zoomable` modifier as follows:
+We start the definition of the `Modifier.zoomableAwaitEachGesture` modifier as follows:
 
 ```kotlin
 @Composable 
@@ -389,7 +389,7 @@ Here is a video of when these events are executed:
 <div style={{ paddingBottom: '2rem' }} />
 
 
-Let us study the code step by step. First, we start by defining the `Modifier.zoomable` modifier. This modifier is a modifier that applies the zoom effect to the image. It takes a `ZoomableState` as a parameter and a `Modifier` as a parameter. The `ZoomableState` is a state object that contains the current zoom level and the minimum and maximum zoom levels. The `Modifier` is the modifier that is applied to the image.
+Let us study the code step by step. First, we start by defining the `Modifier.zoomableAwaitEachGesture` modifier. This modifier is a modifier that applies the zoom effect to the image. The `ZoomableState` is a state object that contains the current zoom level and the minimum and maximum zoom levels. The `Modifier` is the modifier that is applied to the image.
 
 Inside `pointerInput` modifier, we start by awaiting the initial touch. At line `11`, we use the `awaitFirstDown` function to wait for the initial touch. It doesn't block the main thread and sleeps until the user touches the screen. We don't care if the event was already consumed by another component, thus we set `requireUnconsumed` to `false`. 
 
