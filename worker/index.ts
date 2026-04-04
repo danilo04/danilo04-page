@@ -60,7 +60,7 @@ const POSTS_META: Record<string, { en: PostMeta; es: PostMeta }> = {
       title: "Zoom and other effects in Compose",
       summary:
         "In this article, we will explore the effects such as pinch zoom and panning in Compose.",
-      coverImage: `${SITE_URL}/zoom-compose-cover.png`,
+      coverImage: `${SITE_URL}/zoom-compose-cover.webp`,
       author: "Danilo Dominguez",
       date: "2026-01-23",
     },
@@ -68,7 +68,7 @@ const POSTS_META: Record<string, { en: PostMeta; es: PostMeta }> = {
       title: "Zoom y otros efectos en Compose",
       summary:
         "En este artículo, exploraremos los efectos como el zoom con pellizco y el desplazamiento (panning) en Compose.",
-      coverImage: `${SITE_URL}/zoom-compose-cover.png`,
+      coverImage: `${SITE_URL}/zoom-compose-cover.webp`,
       author: "Danilo Dominguez",
       date: "2026-01-23",
     },

@@ -3,7 +3,7 @@ import { useTranslations } from '../hooks/useTranslations';
 import { useHead } from '../hooks/useHead';
 import { useLanguage } from '../components/language-provider';
 import { JsonLd, getPersonSchema } from '../components/JsonLd';
-import daniloImage from '../assets/danilo-cartoon.png';
+import daniloImage from '../assets/danilo-cartoon.webp';
 
 const AboutPage: React.FC = () => {
   const t = useTranslations();

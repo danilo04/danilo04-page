@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslations } from '../hooks/useTranslations';
-import daniloCartoon from '../assets/danilo-cartoon.png';
+import daniloCartoon from '../assets/danilo-cartoon.webp';
 
 export const TECH_STACK = ['Kotlin', 'Java', 'Android SDK', 'Encryption', 'Spring Boot', 'Static Analysis'];
 

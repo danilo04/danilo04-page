@@ -4,11 +4,11 @@ import { useHead } from '../hooks/useHead';
 import { useLanguage } from '../components/language-provider';
 
 // Import talk thumbnails
-import flisol2025Thumbnail from '../assets/talks/flisol-2025-tools-mobile-dev.png';
-import flisol2023Thumbnail from '../assets/talks/flisol-2023-kotlin-coroutines.png';
-import sfd2020Thumbnail from '../assets/talks/sfd-2020-opensource.png';
-import pythonPanama2019Thumbnail from '../assets/talks/pythonpanama-2019-software.png';
-import paperswelove2019Thumbnail from '../assets/talks/paperswelove-2019-event-driven.png';
+import flisol2025Thumbnail from '../assets/talks/flisol-2025-tools-mobile-dev.webp';
+import flisol2023Thumbnail from '../assets/talks/flisol-2023-kotlin-coroutines.webp';
+import sfd2020Thumbnail from '../assets/talks/sfd-2020-opensource.webp';
+import pythonPanama2019Thumbnail from '../assets/talks/pythonpanama-2019-software.webp';
+import paperswelove2019Thumbnail from '../assets/talks/paperswelove-2019-event-driven.webp';
 
 // Import PDFs
 import flisol2025Pdf from '../assets/talks/flisol-2025-tools-mobile-dev.pdf';
