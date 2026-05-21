@@ -502,6 +502,11 @@ export const translations = {
       },
       list: [
         {
+          title: "Designing Applications with AI Agents: Patterns, Prompts, and Architectural Decisions",
+          description:
+            "Building agents is easy. Designing them is not. This talk goes back to the fundamentals of software architecture - trade-offs, constraints and quality attributes - and applies them to agentic systems: Model, System Prompt, Tools and Memory. We'll explore orchestration patterns (ReAct, RAG, Plan-and-Execute, Multi-agent), how to choose a model, and why, in the era of AI, the architect's role matters more than ever.",
+        },
+        {
           title: "Open Source Tools for Quality Assurance",
           description:
             "Exploring essential open-source tools and best practices for quality assurance in modern software development. Learn how to implement effective testing strategies using freely available tools.",
@@ -1155,6 +1160,11 @@ export const translations = {
         getInTouch: "Contáctame",
       },
       list: [
+        {
+          title: "Diseñando Aplicaciones con Agentes de IA: Patrones, Prompts y Decisiones Arquitectónicas",
+          description:
+            "Construir agentes es fácil. Diseñarlos no. Esta charla retoma los fundamentos de la arquitectura de software - trade-offs, restricciones y atributos de calidad - y los aplica a sistemas agénticos: Modelo, System Prompt, Herramientas y Memoria. Exploraremos patrones de orquestación (ReAct, RAG, Plan-and-Execute, Multi-agent), cómo elegir un modelo y por qué, en la era de la IA, el rol del arquitecto importa más que nunca.",
+        },
         {
           title: "Herramientas Open Source para el Aseguramiento de Calidad",
           description:

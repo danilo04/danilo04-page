@@ -4,6 +4,7 @@ import { useHead } from '../hooks/useHead';
 import { useLanguage } from '../components/language-provider';
 
 // Import talk thumbnails
+import flisol2026AgentSystemsThumbnail from '../assets/talks/flisol_2026_agent_systems_talk.webp';
 import flisol2025Thumbnail from '../assets/talks/flisol-2025-tools-mobile-dev.webp';
 import flisol2023Thumbnail from '../assets/talks/flisol-2023-kotlin-coroutines.webp';
 import sfd2020Thumbnail from '../assets/talks/sfd-2020-opensource.webp';
@@ -11,6 +12,7 @@ import pythonPanama2019Thumbnail from '../assets/talks/pythonpanama-2019-softwar
 import paperswelove2019Thumbnail from '../assets/talks/paperswelove-2019-event-driven.webp';
 
 // Import PDFs
+import flisol2026AgentSystemsPdf from '../assets/talks/flisol_2026_agent_systems_talk.pdf';
 import flisol2025Pdf from '../assets/talks/flisol-2025-tools-mobile-dev.pdf';
 import flisol2023Pdf from '../assets/talks/flisol-2023-kotlin-coroutines.pdf';
 import sfd2020Pdf from '../assets/talks/sfd-2020-opensource.pdf';
@@ -51,6 +53,18 @@ const TalksPage: React.FC = () => {
       id: '1',
       title: page.list[0].title,
       description: page.list[0].description,
+      event: 'FLISOL 2026',
+      date: '2026',
+      year: 2025,
+      location: 'Panama City, Panama',
+      thumbnail: flisol2026AgentSystemsThumbnail,
+      deckUrl: flisol2026AgentSystemsPdf,
+      tags: ['Software Architecture', 'AI', 'Agentic AI', 'Prompts'],
+    },
+    {
+      id: '2',
+      title: page.list[1].title,
+      description: page.list[1].description,
       event: 'FLISOL 2025',
       date: '2025',
       year: 2025,
@@ -61,9 +75,9 @@ const TalksPage: React.FC = () => {
       tags: ['Quality Assurance', 'Open Source', 'Testing', 'Mobile Development'],
     },
     {
-      id: '2',
-      title: page.list[1].title,
-      description: page.list[1].description,
+      id: '3',
+      title: page.list[2].title,
+      description: page.list[2].description,
       event: 'FLISOL 2023',
       date: '2023',
       year: 2023,
@@ -73,9 +87,9 @@ const TalksPage: React.FC = () => {
       tags: ['Kotlin', 'Coroutines', 'Android', 'Asynchronous Programming'],
     },
     {
-      id: '3',
-      title: page.list[2].title,
-      description: page.list[2].description,
+      id: '4',
+      title: page.list[3].title,
+      description: page.list[3].description,
       event: 'Software Freedom Day 2020',
       date: '2020',
       year: 2020,
@@ -85,9 +99,9 @@ const TalksPage: React.FC = () => {
       tags: ['Open Source', 'Research', 'Reproducibility', 'Scientific Computing'],
     },
     {
-      id: '4',
-      title: page.list[3].title,
-      description: page.list[3].description,
+      id: '5',
+      title: page.list[4].title,
+      description: page.list[4].description,
       event: 'Python Panama Meetup 2019',
       date: '2019',
       year: 2019,
@@ -97,9 +111,9 @@ const TalksPage: React.FC = () => {
       tags: ['Software Architecture', 'Design', 'SOLID', 'Complexity'],
     },
     {
-      id: '5',
-      title: page.list[4].title,
-      description: page.list[4].description,
+      id: '6',
+      title: page.list[5].title,
+      description: page.list[5].description,
       event: 'Papers We Love Panamá',
       date: 'October 2019',
       year: 2019,
