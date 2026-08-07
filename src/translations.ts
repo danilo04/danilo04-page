@@ -504,6 +504,11 @@ export const translations = {
         {
           title: "Designing Applications with AI Agents: Patterns, Prompts, and Architectural Decisions",
           description:
+            "A comprehensive technical walkthrough on structuring and building modern applications using AI agents. We analyze the fundamental building blocks of an effective agent — from prompt orchestration to design patterns that let agents make decisions and execute actions — and discuss the architectural challenges developers face today, with practical solutions and live demonstrations.",
+        },
+        {
+          title: "Designing Applications with AI Agents: Patterns, Prompts, and Architectural Decisions",
+          description:
             "Building agents is easy. Designing them is not. This talk goes back to the fundamentals of software architecture - trade-offs, constraints and quality attributes - and applies them to agentic systems: Model, System Prompt, Tools and Memory. We'll explore orchestration patterns (ReAct, RAG, Plan-and-Execute, Multi-agent), how to choose a model, and why, in the era of AI, the architect's role matters more than ever.",
         },
         {
@@ -1160,6 +1165,11 @@ export const translations = {
         getInTouch: "Contáctame",
       },
       list: [
+        {
+          title: "Diseñando Aplicaciones con Agentes de IA: Patrones, Prompts y Decisiones Arquitectónicas",
+          description:
+            "Un recorrido técnico integral sobre cómo estructurar y construir aplicaciones modernas con agentes de IA. Analizamos los bloques fundamentales de un agente efectivo — desde la orquestación de prompts hasta los patrones de diseño que permiten tomar decisiones y ejecutar acciones — y discutimos los desafíos arquitectónicos que enfrentan los desarrolladores hoy, con soluciones prácticas y demostraciones en vivo.",
+        },
         {
           title: "Diseñando Aplicaciones con Agentes de IA: Patrones, Prompts y Decisiones Arquitectónicas",
           description:
