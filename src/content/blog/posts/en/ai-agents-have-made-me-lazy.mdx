@@ -1,0 +1,50 @@
+---
+slug: ai-agents-have-made-me-lazy
+title: AI Agents have made me lazy
+summary: Reflections on how working with AI agents is changing the way I think about effort, productivity, and software development.
+category: engineering
+coverImage: https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=630&fit=crop
+author: Danilo Dominguez
+date: 2026-08-22
+readTime: 1 min read
+tags:
+  - AI
+  - AI Agents
+  - Software Engineering
+  - Productivity
+published: true
+---
+
+# AI Agents have made me lazy
+
+I am an engineer who cares about quality and correctness. Not so long ago, I would spend hours writing tests and reviewing code to ensure that the code was correct and that the tests were comprehensive. I love understanding all the edge cases and the different scenarios that the code can handle. I would execute different code paths and scenarios in my mind or on paper to ensure that the code was correct. Testing was a manual process that required me to think about the code and the different scenarios that it could handle. I thought that I was still doing my job well, but I was wrong.
+
+Recently, I needed to implement a feature in some legacy code. As I had been using AI agents, I thought that I could use one to help me with the implementation. I asked the agent to implement the feature, and it did a great job. It wrote the code, I reviewed it (barely), and it worked (for the most part). Then, another engineer reviewed the code and found several issues. I asked the agent to implement some fixes based on the reviewer's comments. The agent did a great job again, or at least I thought it did. Then, the reviewer found more flaws and some edge cases that the changes did not handle. I implemented the fixes and sent the PR for another round of review. The reviewer found another issue: an edge case that I had not handled. Yes, one of those edge cases that I love to think about and consider when writing tests. It was surprising to see how much I missed in a few lines of code... and how much my behavior as a software engineer had changed. I have become lazy, and I am not sure if I like it.
+
+# Do you read the code?
+
+I recently saw an interaction on X about which success metrics should be used to evaluate AI agents that write code.
+
+![Mitchell Hashimoto replying that he reads the code when asked how he evaluates AI-generated code](/ai-agents-read-the-code.png)
+
+It created some debate online about whether we should evaluate the quality of AI-generated code. I thought that I was part of the camp that reads the code when asked how I evaluate AI-generated code. I was wrong. I have delegated to AI agents not only the responsibility of writing code but also part of the thinking process. When I receive a comment on one of my PRs, I just give it to the agent to help me make the changes. I have become lazy, and I am not sure if I like it. Sure, the agent does a great job most of the time. But code is hard, and often the agent will miss something. I can move faster now with agents. The whole process of writing code, generating tests, and writing PRs is much faster now. But at what cost?
+
+# What is the cost of being lazy?
+
+I think we are seeing the cost of being lazy.
+
+The risks become even clearer when agents are allowed to act on production systems. [The Guardian reported that AI tools were involved in two Amazon cloud incidents](https://www.theguardian.com/technology/2026/feb/20/amazon-cloud-outages-ai-tools-amazon-web-services-aws), including a 13-hour interruption in which an agent reportedly chose to delete and recreate part of its environment. Amazon disputed the idea that the AI itself was at fault, describing the incidents as user errors involving misconfigured access controls, and said it subsequently added safeguards such as mandatory peer review for production access. That distinction does not remove human responsibility; it reinforces it. If we give an agent the authority to make changes without providing sufficient context, constraints, and review, then delegating the work does not delegate accountability for the consequences.
+
+Sometimes, I think that I am just delegating the writing of code to agents, but I am also delegating part of the thinking process. Sometimes, I don't even check the tests the agent wrote. I just assume that they are correct and move on. In some cases, I do not carefully check the different edge cases in the problem I am solving. This may be partly related to the kind of problem I am solving. If it is a simple CRUD feature, I tend to be lazier. But if the problem is complex, I tend to be more careful.
+
+# What is the solution?
+
+You could say, "Oh, you are not using the right guardrails. You are not using the right tools." But I am! We are using AI code reviewers, which do help a lot. However, there are some cases in which even these guardrails are not enough. The solution is to think more about the problem and its solution before delegating the work to the agent. If you have a clear solution in mind, you will detect more issues early in the process. You will be able to tell the agent how to write better tests and verify that the code handles all edge cases correctly. Don't get me wrong: I have been doing this for the most part. But there are a few cases in which I haven't. Coding agents are tools that help us, not replacements for us. We need to use them wisely.
+
+We need to change our software development processes. As agents take on more of the implementation work, engineers must invest more effort before generation: defining clear specifications, setting concrete constraints, and deciding how the result will be validated. This is not merely a hypothetical research topic. [An empirical study of ChatGPT's non-determinism in code generation](https://arxiv.org/html/2308.02828v2) evaluated 829 programming problems and found that identical prompts frequently produced code with different behavior; even a temperature of zero did not guarantee deterministic results. The researchers recommend clear, structured prompts with concrete response requirements, together with robust testing and validation. In practice, this means that a good specification and prompt can guide an agent, but neither can guarantee the outcome. We still need reproducible tests, repeated checks for important changes, and human judgment.
+
+Code review must evolve as well. It should evaluate not only the generated code but also the reasoning, assumptions, and evidence that the implementation satisfies the specification. Because agents can produce code faster than humans can review it, review can easily become the next bottleneck. The answer is not to review less, but to move more validation earlier in the process and give reviewers better evidence: explicit acceptance criteria, focused tests, and a clear explanation of the decisions behind the change.
+
+# Final thoughts
+
+I think coding agents are a great tool to help us. I have become a better Software Engineer by using them. But I am not sure if I am a better Software Engineer by being lazy. I think we need to use them wisely. We need to change our processes to use them effectively. We need to think more about the problem and its solution before delegating the work to the agent. We need to write better tests and verify that the code handles all edge cases correctly. We need to give reviewers better evidence: explicit acceptance criteria, focused tests, and a clear explanation of the decisions behind the change. We need to read more, think more, and write better.

@@ -1,0 +1,50 @@
+---
+slug: ai-agents-have-made-me-lazy
+title: Los agentes de IA me han vuelto perezoso
+summary: Reflexiones sobre cómo trabajar con agentes de IA está cambiando mi forma de pensar sobre el esfuerzo, la productividad y el desarrollo de software.
+category: engineering
+coverImage: https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&h=630&fit=crop
+author: Danilo Dominguez
+date: 2026-08-22
+readTime: 1 min de lectura
+tags:
+  - IA
+  - Agentes de IA
+  - Ingeniería de software
+  - Productividad
+published: true
+---
+
+# Los agentes de IA me han vuelto perezoso
+
+Soy un ingeniero al que le importan la calidad y la corrección. No hace mucho, pasaba horas escribiendo pruebas y revisando código para asegurarme de que fuera correcto y de que las pruebas fueran exhaustivas. Me encanta comprender todos los casos límite y los diferentes escenarios que el código puede manejar. Recorría distintos caminos de ejecución y escenarios en mi mente o en papel para asegurarme de que el código fuera correcto. Las pruebas eran un proceso manual que me obligaba a pensar en el código y en los diferentes escenarios que podía manejar. Pensaba que todavía estaba haciendo bien mi trabajo, pero me equivocaba.
+
+Hace poco, necesitaba implementar una funcionalidad en un código legado. Como había estado usando agentes de IA, pensé que podía recurrir a uno para que me ayudara con la implementación. Le pedí al agente que implementara la funcionalidad e hizo un gran trabajo. Escribió el código, yo lo revisé (apenas) y funcionó (en su mayor parte). Después, otro ingeniero revisó el código y encontró varios problemas. Le pedí al agente que implementara algunas correcciones basadas en los comentarios del revisor. El agente volvió a hacer un gran trabajo, o al menos eso creía. Luego, el revisor encontró más fallos y algunos casos límite que los cambios no contemplaban. Implementé las correcciones y envié el PR a otra ronda de revisión. El revisor encontró otro problema: un caso límite que yo no había contemplado. Sí, uno de esos casos límite sobre los que me encanta pensar y que suelo considerar al escribir pruebas. Fue sorprendente ver cuánto se me había escapado en unas pocas líneas de código... y cuánto había cambiado mi comportamiento como ingeniero de software. Me he vuelto perezoso y no estoy seguro de que me guste.
+
+# ¿Lees el código?
+
+Hace poco vi una interacción en X sobre qué métricas de éxito deberían utilizarse para evaluar a los agentes de IA que escriben código.
+
+![Mitchell Hashimoto responde que lee el código cuando le preguntan cómo evalúa el código generado por IA](/ai-agents-read-the-code.png)
+
+Esto generó cierto debate en línea sobre si deberíamos evaluar la calidad del código generado por IA. Pensaba que formaba parte del grupo que lee el código cuando le preguntan cómo evalúa el código generado por IA. Me equivocaba. He delegado en los agentes de IA no solo la responsabilidad de escribir código, sino también parte del proceso de razonamiento. Cuando recibo un comentario en uno de mis PR, simplemente se lo paso al agente para que me ayude a hacer los cambios. Me he vuelto perezoso y no estoy seguro de que me guste. Claro, el agente hace un gran trabajo la mayor parte del tiempo. Pero el código es difícil y, con frecuencia, al agente se le escapará algo. Ahora puedo avanzar más rápido con los agentes. Todo el proceso de escribir código, generar pruebas y redactar PR es mucho más rápido. Pero ¿a qué costo?
+
+# ¿Cuál es el costo de ser perezoso?
+
+Creo que estamos viendo el costo de ser perezoso.
+
+Los riesgos se vuelven aún más evidentes cuando se permite que los agentes actúen sobre sistemas de producción. [The Guardian informó que herramientas de IA estuvieron involucradas en dos incidentes en la nube de Amazon](https://www.theguardian.com/technology/2026/feb/20/amazon-cloud-outages-ai-tools-amazon-web-services-aws), incluido un incidente de 13 horas en el que, según los informes, un agente decidió eliminar y volver a crear parte de su entorno. Amazon rechazó la idea de que la propia IA tuviera la culpa, describió los incidentes como errores humanos relacionados con controles de acceso mal configurados y afirmó que posteriormente añadió medidas de protección, como la revisión obligatoria por pares para acceder a producción. Esa distinción no elimina la responsabilidad humana; la refuerza. Si le damos a un agente la autoridad para hacer cambios sin proporcionarle suficiente contexto, restricciones y revisión, delegar el trabajo no significa delegar la responsabilidad por las consecuencias.
+
+A veces pienso que solo estoy delegando en los agentes la escritura del código, pero también estoy delegando parte del proceso de razonamiento. A veces ni siquiera reviso las pruebas que escribió el agente. Simplemente asumo que son correctas y sigo adelante. En algunos casos, no reviso cuidadosamente los distintos casos límite del problema que estoy resolviendo. Esto puede estar relacionado, en parte, con el tipo de problema. Si se trata de una funcionalidad CRUD sencilla, tiendo a ser más perezoso. Pero si el problema es complejo, tiendo a ser más cuidadoso.
+
+# ¿Cuál es la solución?
+
+Podrías decir: «No estás usando las medidas de protección adecuadas. No estás usando las herramientas correctas». ¡Pero sí las uso! Utilizamos revisores de código con IA, que ayudan mucho. Sin embargo, hay casos en los que ni siquiera estas medidas de protección son suficientes. La solución es pensar más en el problema y en su solución antes de delegar el trabajo en el agente. Si tienes una solución clara en mente, detectarás más problemas al principio del proceso. Podrás indicarle al agente cómo escribir mejores pruebas y verificar que el código maneje correctamente todos los casos límite. No me malinterpretes: hago esto la mayor parte del tiempo. Pero hay algunos casos en los que no lo he hecho. Los agentes de programación son herramientas que nos ayudan, no nuestros reemplazos. Debemos utilizarlos con prudencia.
+
+Necesitamos cambiar nuestros procesos de desarrollo de software. A medida que los agentes asumen una mayor parte del trabajo de implementación, los ingenieros deben invertir más esfuerzo antes de la generación: definir especificaciones claras, establecer restricciones concretas y decidir cómo se validará el resultado. Esto no es solo un tema de investigación hipotético. [Un estudio empírico sobre el no determinismo de ChatGPT en la generación de código](https://arxiv.org/html/2308.02828v2) evaluó 829 problemas de programación y descubrió que instrucciones idénticas producían con frecuencia código con comportamientos diferentes; ni siquiera una temperatura de cero garantizaba resultados deterministas. Los investigadores recomiendan instrucciones claras y estructuradas, con requisitos de respuesta concretos, junto con pruebas y validaciones robustas. En la práctica, esto significa que una buena especificación y una buena instrucción pueden guiar a un agente, pero ninguna garantiza el resultado. Seguimos necesitando pruebas reproducibles, verificaciones repetidas para los cambios importantes y criterio humano.
+
+La revisión de código también debe evolucionar. Debe evaluar no solo el código generado, sino también el razonamiento, las suposiciones y la evidencia de que la implementación cumple con la especificación. Como los agentes pueden producir código más rápido de lo que los humanos pueden revisarlo, la revisión puede convertirse fácilmente en el siguiente cuello de botella. La respuesta no es revisar menos, sino adelantar la validación en el proceso y ofrecer mejores evidencias a los revisores: criterios de aceptación explícitos, pruebas específicas y una explicación clara de las decisiones detrás del cambio.
+
+# Reflexiones finales
+
+Creo que los agentes de programación son una gran herramienta para ayudarnos. Me he convertido en un mejor ingeniero de software al utilizarlos. Pero no estoy seguro de ser un mejor ingeniero de software por haberme vuelto perezoso. Creo que debemos utilizarlos con prudencia. Necesitamos cambiar nuestros procesos para usarlos de manera eficaz. Debemos pensar más en el problema y en su solución antes de delegar el trabajo en el agente. Necesitamos escribir mejores pruebas y verificar que el código maneje correctamente todos los casos límite. Debemos ofrecer mejores evidencias a los revisores: criterios de aceptación explícitos, pruebas específicas y una explicación clara de las decisiones detrás del cambio. Necesitamos leer más, pensar más y escribir mejor.
