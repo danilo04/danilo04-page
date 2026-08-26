@@ -1,9 +1,9 @@
 import type { BlogPost, BlogPostFrontmatter, Language, LocalizedBlogPost } from './types';
 
 // Import English MDX posts
-import AiAgentsHaveMadeMeLazyEn, {
-  frontmatter as aiAgentsHaveMadeMeLazyEnFrontmatter
-} from './posts/en/ai-agents-have-made-me-lazy.mdx';
+import AiAgentsCanMakeUsLazyEn, {
+  frontmatter as aiAgentsCanMakeUsLazyEnFrontmatter
+} from './posts/en/ai-agents-can-make-us-lazy.mdx';
 import ReactiveAndroidKotlinFlowsEn, { 
   frontmatter as reactiveAndroidKotlinFlowsEnFrontmatter 
 } from './posts/en/reactive-android-kotlin-flows.mdx';
@@ -15,9 +15,9 @@ import ZoomAndOtherEffectsComposeEn, {
 } from './posts/en/zoom-and-other-effects-compose.mdx';
 
 // Import Spanish MDX posts
-import AiAgentsHaveMadeMeLazyEs, {
-  frontmatter as aiAgentsHaveMadeMeLazyEsFrontmatter
-} from './posts/es/ai-agents-have-made-me-lazy.mdx';
+import AiAgentsCanMakeUsLazyEs, {
+  frontmatter as aiAgentsCanMakeUsLazyEsFrontmatter
+} from './posts/es/ai-agents-can-make-us-lazy.mdx';
 import ReactiveAndroidKotlinFlowsEs, { 
   frontmatter as reactiveAndroidKotlinFlowsEsFrontmatter 
 } from './posts/es/reactive-android-kotlin-flows.mdx';
@@ -30,14 +30,14 @@ import ZoomAndOtherEffectsComposeEs, {
 
 // All blog posts organized by slug with both languages
 const blogPostsMap: Record<string, LocalizedBlogPost> = {
-  'ai-agents-have-made-me-lazy': {
+  'ai-agents-can-make-us-lazy': {
     en: {
-      frontmatter: aiAgentsHaveMadeMeLazyEnFrontmatter as unknown as BlogPostFrontmatter,
-      Content: AiAgentsHaveMadeMeLazyEn,
+      frontmatter: aiAgentsCanMakeUsLazyEnFrontmatter as unknown as BlogPostFrontmatter,
+      Content: AiAgentsCanMakeUsLazyEn,
     },
     es: {
-      frontmatter: aiAgentsHaveMadeMeLazyEsFrontmatter as unknown as BlogPostFrontmatter,
-      Content: AiAgentsHaveMadeMeLazyEs,
+      frontmatter: aiAgentsCanMakeUsLazyEsFrontmatter as unknown as BlogPostFrontmatter,
+      Content: AiAgentsCanMakeUsLazyEs,
     },
   },
   'reactive-android-kotlin-flows': {
