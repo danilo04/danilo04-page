@@ -47,6 +47,17 @@ export const translations = {
         title: "Work Experience",
         jobs: [
           {
+            title: "Senior Mobile Engineer",
+            company: "Plan A Technologies",
+            location: "Remote",
+            period: "February 2026 – Present",
+            highlights: [
+              "Contribute to the development of a Kotlin Multiplatform app.",
+              "Championed code quality by establishing rigorous testing standards for shared KMP modules, reducing platform-specific regressions and improving overall application stability.",
+              "Integrated backend APIs into the KMP shared layer, streamlining network requests and data parsing for both client platforms.",
+            ],
+          },
+          {
             title: "Part-time Professor",
             company: "Technological University of Panama",
             location: "Panama City, Panama",
@@ -722,6 +733,17 @@ export const translations = {
       experience: {
         title: "Experiencia Laboral",
         jobs: [
+          {
+            title: "Ingeniero Móvil Senior",
+            company: "Plan A Technologies",
+            location: "Remoto",
+            period: "Febrero 2026 – Presente",
+            highlights: [
+              "Contribuyo al desarrollo de una aplicación Kotlin Multiplatform.",
+              "Impulsé la calidad del código estableciendo estándares rigurosos de pruebas para módulos KMP compartidos, reduciendo las regresiones específicas de cada plataforma y mejorando la estabilidad general de la aplicación.",
+              "Integré APIs de backend en la capa compartida de KMP, simplificando las solicitudes de red y el análisis de datos para ambas plataformas cliente.",
+            ],
+          },
           {
             title: "Profesor de Tiempo Parcial",
             company: "Universidad Tecnológica de Panamá",
